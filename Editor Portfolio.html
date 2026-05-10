@@ -1,0 +1,628 @@
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="utf-8" />
+<meta name="viewport" content="width=device-width, initial-scale=1" />
+<title>Becca — Freelance Editor</title>
+
+<link rel="preconnect" href="https://fonts.googleapis.com" />
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+<link href="https://fonts.googleapis.com/css2?family=Source+Serif+4:opsz,wght@8..60,300;8..60,400;8..60,500;8..60,600;8..60,700&family=Newsreader:opsz,wght@6..72,300;6..72,400;6..72,500;6..72,600&family=Cormorant+Garamond:wght@300;400;500;600&family=JetBrains+Mono:wght@400;500&display=swap" rel="stylesheet" />
+
+<style>
+  /* ─── Tokens ─────────────────────────────────────────────── */
+  :root{
+    /* cream + ink (default) */
+    --bg:        #f4ede0;
+    --bg-2:      #ebe2d2;
+    --ink:       #1a1814;
+    --ink-2:     #4a463d;
+    --ink-3:     #807a6c;
+    --rule:      rgba(26,24,20,.16);
+    --accent:    #3d5343;     /* muted forest */
+    --paper:     #faf6ec;     /* book cover paper */
+    --display:   "Source Serif 4", "Source Serif Pro", Georgia, serif;
+    --body:      "Source Serif 4", "Source Serif Pro", Georgia, serif;
+    --mono:      "JetBrains Mono", ui-monospace, SFMono-Regular, Menlo, monospace;
+  }
+
+  /* palette variants */
+  body[data-palette="ivory"]{
+    --bg:#faf7f0; --bg-2:#f1ebde; --ink:#15130f; --ink-2:#4a463d; --ink-3:#857f72;
+    --rule:rgba(21,19,15,.14); --accent:#a14a32; --paper:#fffdf6;
+  }
+  body[data-palette="sage"]{
+    --bg:#e8eae0; --bg-2:#dcdfd1; --ink:#1f2218; --ink-2:#4f5343; --ink-3:#838672;
+    --rule:rgba(31,34,24,.16); --accent:#3d5343; --paper:#f3f4ea;
+  }
+  body[data-palette="paper"]{
+    --bg:#fdfbf6; --bg-2:#f4f0e6; --ink:#111110; --ink-2:#46443f; --ink-3:#7c7a72;
+    --rule:rgba(17,17,16,.14); --accent:#1a3a4a; --paper:#fffefa;
+  }
+
+  /* display font variants */
+  body[data-display="newsreader"]{ --display:"Newsreader", Georgia, serif; }
+  body[data-display="cormorant"]{ --display:"Cormorant Garamond", Georgia, serif; }
+
+  *{box-sizing:border-box}
+  html,body{margin:0;padding:0}
+  html{background:var(--bg)}
+  body{
+    background:var(--bg);
+    color:var(--ink);
+    font-family:var(--body);
+    font-size:18px;
+    line-height:1.5;
+    font-feature-settings:"liga","kern";
+    -webkit-font-smoothing:antialiased;
+    text-rendering:optimizeLegibility;
+    transition:background-color .35s ease, color .35s ease;
+  }
+  ::selection{background:var(--accent);color:var(--bg)}
+
+  a{color:inherit;text-decoration:none}
+  a.link{
+    background-image:linear-gradient(to right,currentColor,currentColor);
+    background-position:0 100%;
+    background-repeat:no-repeat;
+    background-size:100% 1px;
+    padding-bottom:2px;
+    transition:background-size .25s ease, color .25s ease;
+  }
+  a.link:hover{ color:var(--accent); background-size:0% 1px; background-position:100% 100%; }
+
+  /* ─── Layout shell ───────────────────────────────────────── */
+  .wrap{
+    max-width:1280px;
+    margin:0 auto;
+    padding-inline:56px;
+  }
+  @media (max-width:720px){ .wrap{ padding-inline:24px; } }
+
+  /* ─── Top bar ────────────────────────────────────────────── */
+  header.top{
+    position:sticky;top:0;z-index:5;
+    background:color-mix(in oklab, var(--bg) 88%, transparent);
+    backdrop-filter:blur(10px);
+    border-bottom:1px solid var(--rule);
+  }
+  header.top .row{
+    display:flex;align-items:baseline;justify-content:space-between;
+    padding-block:18px 16px;
+  }
+  .mark{
+    font-family:var(--display);
+    font-size:18px;
+    font-weight:500;
+    letter-spacing:-.005em;
+  }
+  .mark em{ font-style:italic; color:var(--ink-2); font-weight:400; }
+  nav.top-nav{
+    display:flex; gap:28px;
+    font-family:var(--mono);
+    font-size:11.5px;
+    text-transform:uppercase;
+    letter-spacing:.12em;
+    color:var(--ink-2);
+  }
+  nav.top-nav a:hover{ color:var(--ink); }
+
+  /* ─── Section scaffolding ────────────────────────────────── */
+  section{ padding-block:96px; border-bottom:1px solid var(--rule); }
+  section:last-of-type{ border-bottom:0; }
+  @media (max-width:720px){ section{ padding-block:64px; } }
+
+  .eyebrow{
+    display:flex; align-items:center; gap:14px;
+    font-family:var(--mono);
+    font-size:11px;
+    text-transform:uppercase;
+    letter-spacing:.18em;
+    color:var(--ink-3);
+    margin-bottom:36px;
+  }
+  .eyebrow .dot{
+    display:inline-block; width:6px; height:6px; border-radius:50%;
+    background:var(--accent);
+  }
+
+  /* ─── Hero ───────────────────────────────────────────────── */
+  .hero{ padding-block:104px 96px; }
+  .hero h1{
+    font-family:var(--display);
+    font-weight:400;
+    font-size:clamp(56px, 9.4vw, 156px);
+    line-height:.96;
+    letter-spacing:-.025em;
+    margin:0 0 44px;
+    text-wrap:balance;
+  }
+  .hero h1 .amp{ font-style:italic; font-weight:300; color:var(--ink-2); }
+  .hero .lede{
+    max-width:760px;
+    font-family:var(--display);
+    font-weight:400;
+    font-size:clamp(20px, 1.7vw, 26px);
+    line-height:1.45;
+    color:var(--ink);
+    margin:0;
+    text-wrap:pretty;
+  }
+  .hero .meta{
+    display:flex; flex-wrap:wrap; gap:32px 48px;
+    margin-top:56px;
+    font-family:var(--mono);
+    font-size:11.5px;
+    text-transform:uppercase;
+    letter-spacing:.14em;
+    color:var(--ink-3);
+  }
+  .hero .meta strong{ color:var(--ink); font-weight:500; display:block; margin-top:6px; font-family:var(--display); font-size:15px; letter-spacing:.02em; text-transform:none; }
+
+  /* ─── Work / Selected covers ─────────────────────────────── */
+  .work-head{
+    display:flex; justify-content:space-between; align-items:baseline;
+    margin-bottom:48px;
+  }
+  .work-head h2{
+    font-family:var(--display);
+    font-weight:400; font-size:clamp(28px, 3vw, 40px);
+    margin:0; letter-spacing:-.015em;
+  }
+  .work-head .note{
+    font-family:var(--mono); font-size:11px; letter-spacing:.14em;
+    text-transform:uppercase; color:var(--ink-3);
+  }
+
+  .covers{
+    display:grid;
+    grid-template-columns:repeat(4, 1fr);
+    gap:48px 32px;
+  }
+  body[data-cover-layout="dense"] .covers{ grid-template-columns:repeat(5, 1fr); gap:36px 24px; }
+  body[data-cover-layout="loose"] .covers{ grid-template-columns:repeat(3, 1fr); gap:64px 48px; }
+
+  @media (max-width:1080px){ .covers{ grid-template-columns:repeat(3, 1fr) !important; gap:48px 28px !important; } }
+  @media (max-width:720px){ .covers{ grid-template-columns:repeat(2, 1fr) !important; gap:36px 20px !important; } }
+
+  .cover{
+    display:flex; flex-direction:column; gap:14px;
+  }
+  .cover .frame{
+    aspect-ratio: 2 / 3;
+    background:var(--paper);
+    border:1px solid var(--rule);
+    box-shadow:
+      0 1px 0 rgba(0,0,0,.04),
+      0 8px 24px -12px rgba(0,0,0,.18);
+    position:relative; overflow:hidden;
+    transition:transform .4s cubic-bezier(.2,.7,.2,1), box-shadow .4s ease;
+  }
+  .cover:hover .frame{
+    transform:translateY(-4px);
+    box-shadow:
+      0 1px 0 rgba(0,0,0,.04),
+      0 18px 36px -16px rgba(0,0,0,.28);
+  }
+  /* subtle drop-zone stripes for placeholders */
+  .cover .frame.placeholder::before{
+    content:""; position:absolute; inset:0;
+    background-image: repeating-linear-gradient(
+      135deg,
+      transparent 0 14px,
+      rgba(0,0,0,.035) 14px 15px
+    );
+    pointer-events:none;
+  }
+  .cover .frame .label{
+    position:absolute; left:14px; right:14px; bottom:14px;
+    font-family:var(--mono); font-size:10px; letter-spacing:.12em;
+    text-transform:uppercase; color:var(--ink-3);
+    display:flex; justify-content:space-between; gap:10px;
+  }
+  .cover .frame .typo{
+    position:absolute; inset:0;
+    display:flex; flex-direction:column; justify-content:space-between;
+    padding:22px 20px;
+  }
+  .cover .frame .typo .ttl{
+    font-family:var(--display); font-weight:500;
+    font-size:clamp(15px, 1.3vw, 20px); line-height:1.05;
+    color:var(--ink); letter-spacing:-.01em;
+    text-wrap:balance;
+  }
+  .cover .frame .typo .au{
+    font-family:var(--mono); font-size:10px; letter-spacing:.14em;
+    text-transform:uppercase; color:var(--ink-2);
+  }
+  .cover .meta{
+    display:flex; justify-content:space-between; gap:14px; align-items:baseline;
+  }
+  .cover .meta .t{
+    font-family:var(--display); font-weight:500; font-size:15.5px;
+    line-height:1.25; letter-spacing:-.005em;
+  }
+  .cover .meta .t em{ font-weight:400; color:var(--ink-2); font-style:italic; display:block; font-size:13.5px; margin-top:2px; }
+  .cover .meta .y{
+    font-family:var(--mono); font-size:11px; color:var(--ink-3);
+    letter-spacing:.06em; flex-shrink:0;
+  }
+
+  /* accent bar variant for typographic placeholders */
+  .cover .frame.v-bar{ background:var(--paper); }
+  .cover .frame.v-bar::after{
+    content:""; position:absolute; left:0; top:0; bottom:0; width:6px;
+    background:var(--accent);
+  }
+  .cover .frame.v-rule .typo{ border-top:1px solid var(--ink); border-bottom:1px solid var(--ink); margin:24px 18px; padding:18px 0; inset:auto; position:relative; height:calc(100% - 48px); }
+  .cover .frame.v-block{ background:var(--ink); }
+  .cover .frame.v-block .typo .ttl{ color:var(--paper); }
+  .cover .frame.v-block .typo .au{ color:color-mix(in oklab, var(--paper) 70%, transparent); }
+  .cover .frame.v-block::before{ background-image: repeating-linear-gradient(135deg, transparent 0 14px, rgba(255,255,255,.04) 14px 15px); }
+  .cover .frame.v-block .label{ color:color-mix(in oklab, var(--paper) 55%, transparent); }
+  .cover .frame.v-tan{ background:#d9c8a3; }
+  .cover .frame.v-rust{ background:#b85a3a; }
+  .cover .frame.v-rust .typo .ttl, .cover .frame.v-rust .typo .au{ color:#fbeedd; }
+  .cover .frame.v-rust .label{ color:rgba(251,238,221,.65); }
+  .cover .frame.v-rust::before{ background-image: repeating-linear-gradient(135deg, transparent 0 14px, rgba(255,255,255,.05) 14px 15px); }
+  .cover .frame.v-deep{ background:#1f3340; }
+  .cover .frame.v-deep .typo .ttl, .cover .frame.v-deep .typo .au{ color:#e8dec8; }
+  .cover .frame.v-deep .label{ color:rgba(232,222,200,.55); }
+  .cover .frame.v-deep::before{ background-image: repeating-linear-gradient(135deg, transparent 0 14px, rgba(255,255,255,.04) 14px 15px); }
+
+  /* ─── Services ───────────────────────────────────────────── */
+  .services{
+    display:grid; grid-template-columns:1fr 1fr; gap:80px;
+  }
+  @media (max-width:900px){ .services{ grid-template-columns:1fr; gap:48px; } }
+  .services h2{
+    font-family:var(--display); font-weight:400;
+    font-size:clamp(32px, 4.2vw, 64px); line-height:1.04;
+    letter-spacing:-.02em; margin:0; text-wrap:balance;
+  }
+  .services h2 em{ font-style:italic; color:var(--ink-2); font-weight:300; }
+  .svc-list{ list-style:none; margin:0; padding:0; }
+  .svc-list li{
+    display:grid; grid-template-columns:44px 1fr;
+    gap:20px; align-items:baseline;
+    padding:22px 0;
+    border-top:1px solid var(--rule);
+  }
+  .svc-list li:last-child{ border-bottom:1px solid var(--rule); }
+  .svc-list .num{
+    font-family:var(--mono); font-size:11px; letter-spacing:.14em;
+    color:var(--ink-3); padding-top:6px;
+  }
+  .svc-list .name{
+    font-family:var(--display); font-size:24px; font-weight:400;
+    letter-spacing:-.01em; line-height:1.2;
+  }
+
+  /* ─── Contact ────────────────────────────────────────────── */
+  .contact{
+    display:grid; grid-template-columns: 1.2fr 1fr; gap:80px; align-items:end;
+  }
+  @media (max-width:900px){ .contact{ grid-template-columns:1fr; gap:40px; align-items:start; } }
+  .contact h2{
+    font-family:var(--display); font-weight:400;
+    font-size:clamp(40px, 6vw, 96px); line-height:.98;
+    letter-spacing:-.025em; margin:0 0 24px;
+    text-wrap:balance;
+  }
+  .contact h2 em{ font-style:italic; color:var(--ink-2); font-weight:300; }
+  .contact .blurb{
+    max-width:520px; color:var(--ink-2); font-size:18px; line-height:1.5;
+  }
+  .contact .links{
+    display:flex; flex-direction:column; gap:16px;
+  }
+  .contact .links a{
+    display:flex; align-items:baseline; justify-content:space-between;
+    padding:22px 0;
+    border-top:1px solid var(--rule);
+    font-family:var(--display); font-size:24px; letter-spacing:-.005em;
+    transition:color .2s ease, padding .25s ease;
+  }
+  .contact .links a:last-child{ border-bottom:1px solid var(--rule); }
+  .contact .links a:hover{ color:var(--accent); padding-left:8px; }
+  .contact .links a .arrow{
+    font-family:var(--mono); font-size:14px; letter-spacing:.06em;
+    color:var(--ink-3); transition:transform .25s ease, color .25s ease;
+  }
+  .contact .links a:hover .arrow{ color:var(--accent); transform:translateX(4px); }
+
+  /* ─── Footer ─────────────────────────────────────────────── */
+  footer.bottom{
+    padding-block:32px 40px;
+    display:flex; justify-content:space-between; align-items:baseline;
+    font-family:var(--mono); font-size:11px; letter-spacing:.14em;
+    text-transform:uppercase; color:var(--ink-3);
+    border-top:1px solid var(--rule);
+  }
+
+  /* ─── Tweaks panel mount ─────────────────────────────────── */
+  #tweaks-mount{ position:fixed; inset:0; pointer-events:none; z-index:2147483646; }
+  #tweaks-mount > *{ pointer-events:auto; }
+
+</style>
+</head>
+<body data-palette="cream" data-display="source-serif" data-cover-layout="regular">
+
+<header class="top" data-screen-label="Top bar">
+  <div class="wrap row">
+    <div class="mark">Becca <em>— Editor</em></div>
+    <nav class="top-nav">
+      <a href="#work">Work</a>
+      <a href="#services">Services</a>
+      <a href="#contact">Contact</a>
+    </nav>
+  </div>
+</header>
+
+<main>
+
+<!-- ─── HERO / ABOUT ──────────────────────────────────────────── -->
+<section class="hero wrap" id="about" data-screen-label="01 Hero / About">
+  <h1>
+    Nonfiction editor <span class="amp">&amp;</span> book partner.
+  </h1>
+  <p class="lede">
+    I'm a freelance editor specializing in nonfiction with impact, from popular science
+    and memoir to guidebooks and comics. For 10 years, I was an acquiring editor at
+    Island Press, where I collaborated with award-winning authors to bring their passion
+    and knowledge onto the page.
+  </p>
+  <div class="meta">
+    <div>Based in<strong>Washington, D.C.</strong></div>
+    <div>Working on<strong>Books worldwide</strong></div>
+    <div>Booking<strong>Spring 2026 →</strong></div>
+  </div>
+</section>
+
+<!-- ─── SELECTED WORK ─────────────────────────────────────────── -->
+<section class="wrap" id="work" data-screen-label="02 Selected Work">
+  <div class="eyebrow"><span class="dot"></span> Selected Work</div>
+
+  <div class="work-head">
+    <h2>A decade of nonfiction with impact.</h2>
+    <div class="note">2014 &nbsp;—&nbsp; 2024</div>
+  </div>
+
+  <div class="covers">
+
+    <div class="cover">
+      <div class="frame placeholder v-bar">
+        <div class="typo">
+          <div class="ttl">The&nbsp;Quiet<br/>Architecture<br/>of&nbsp;Rivers</div>
+          <div class="au">— A. Marlowe</div>
+        </div>
+        <div class="label"><span>Cover 01</span><span>drop image →</span></div>
+      </div>
+      <div class="meta">
+        <div class="t">Title One<em>Author Name</em></div>
+        <div class="y">2024</div>
+      </div>
+    </div>
+
+    <div class="cover">
+      <div class="frame placeholder v-rust">
+        <div class="typo">
+          <div class="ttl">Borrowed<br/>Light</div>
+          <div class="au">A&nbsp;Memoir</div>
+        </div>
+        <div class="label"><span>Cover 02</span><span>drop image →</span></div>
+      </div>
+      <div class="meta">
+        <div class="t">Title Two<em>Author Name</em></div>
+        <div class="y">2023</div>
+      </div>
+    </div>
+
+    <div class="cover">
+      <div class="frame placeholder v-block">
+        <div class="typo">
+          <div class="ttl">Field Notes<br/>From the<br/>Understory</div>
+          <div class="au">— Popular Science</div>
+        </div>
+        <div class="label"><span>Cover 03</span><span>drop image →</span></div>
+      </div>
+      <div class="meta">
+        <div class="t">Title Three<em>Author Name</em></div>
+        <div class="y">2023</div>
+      </div>
+    </div>
+
+    <div class="cover">
+      <div class="frame placeholder v-tan">
+        <div class="typo">
+          <div class="ttl">A Guide<br/>to Slow<br/>Travel</div>
+          <div class="au">— Guidebook</div>
+        </div>
+        <div class="label"><span>Cover 04</span><span>drop image →</span></div>
+      </div>
+      <div class="meta">
+        <div class="t">Title Four<em>Author Name</em></div>
+        <div class="y">2022</div>
+      </div>
+    </div>
+
+    <div class="cover">
+      <div class="frame placeholder v-deep">
+        <div class="typo">
+          <div class="ttl">The&nbsp;Long<br/>Bright&nbsp;Land</div>
+          <div class="au">— Essays</div>
+        </div>
+        <div class="label"><span>Cover 05</span><span>drop image →</span></div>
+      </div>
+      <div class="meta">
+        <div class="t">Title Five<em>Author Name</em></div>
+        <div class="y">2022</div>
+      </div>
+    </div>
+
+    <div class="cover">
+      <div class="frame placeholder v-bar">
+        <div class="typo">
+          <div class="ttl">Soft Tools</div>
+          <div class="au">A&nbsp;Graphic&nbsp;Memoir</div>
+        </div>
+        <div class="label"><span>Cover 06</span><span>drop image →</span></div>
+      </div>
+      <div class="meta">
+        <div class="t">Title Six<em>Author Name</em></div>
+        <div class="y">2021</div>
+      </div>
+    </div>
+
+    <div class="cover">
+      <div class="frame placeholder v-rust">
+        <div class="typo">
+          <div class="ttl">After<br/>the&nbsp;Dam</div>
+          <div class="au">— Reportage</div>
+        </div>
+        <div class="label"><span>Cover 07</span><span>drop image →</span></div>
+      </div>
+      <div class="meta">
+        <div class="t">Title Seven<em>Author Name</em></div>
+        <div class="y">2020</div>
+      </div>
+    </div>
+
+    <div class="cover">
+      <div class="frame placeholder v-tan">
+        <div class="typo">
+          <div class="ttl">Common<br/>Birds, Common<br/>Names</div>
+          <div class="au">— Field Guide</div>
+        </div>
+        <div class="label"><span>Cover 08</span><span>drop image →</span></div>
+      </div>
+      <div class="meta">
+        <div class="t">Title Eight<em>Author Name</em></div>
+        <div class="y">2019</div>
+      </div>
+    </div>
+
+  </div>
+</section>
+
+<!-- ─── SERVICES ──────────────────────────────────────────────── -->
+<section class="wrap" id="services" data-screen-label="03 Services">
+  <div class="eyebrow"><span class="dot"></span> Services</div>
+  <div class="services">
+    <div>
+      <h2>From a first idea to <em>a finished page.</em></h2>
+    </div>
+    <ul class="svc-list">
+      <li><span class="num">01</span><span class="name">Book coaching and proposal editing</span></li>
+      <li><span class="num">02</span><span class="name">Manuscript assessment / beta reading</span></li>
+      <li><span class="num">03</span><span class="name">Developmental editing</span></li>
+      <li><span class="num">04</span><span class="name">Line editing</span></li>
+      <li><span class="num">05</span><span class="name">Copywriting</span></li>
+    </ul>
+  </div>
+</section>
+
+<!-- ─── CONTACT ───────────────────────────────────────────────── -->
+<section class="wrap" id="contact" data-screen-label="04 Contact">
+  <div class="eyebrow"><span class="dot"></span> Get in touch</div>
+  <div class="contact">
+    <div>
+      <h2>Working on<br/>something <em>worth reading?</em></h2>
+      <p class="blurb">
+        I'd love to hear about your book. Send a note with a sentence or two about the
+        project and where you are in the process.
+      </p>
+    </div>
+    <div class="links">
+      <a class="link-row" href="/cdn-cgi/l/email-protection#cba3aea7a7a48baeb3aaa6bba7aee5a8a4a6">
+        <span><span class="__cf_email__" data-cfemail="e9818c858586a98c91888499858cc78a8684">[email&#160;protected]</span></span>
+        <span class="arrow">EMAIL →</span>
+      </a>
+      <a class="link-row" href="https://www.linkedin.com/" target="_blank" rel="noopener">
+        <span>LinkedIn</span>
+        <span class="arrow">PROFILE →</span>
+      </a>
+    </div>
+  </div>
+</section>
+
+</main>
+
+<footer class="bottom wrap">
+  <div>© 2026 Becca</div>
+  <div>Last updated · Spring 2026</div>
+</footer>
+
+<div id="tweaks-mount"></div>
+
+<!-- ─── React + Babel for Tweaks panel ─────────────────────── -->
+<script data-cfasync="false" src="/cdn-cgi/scripts/5c5dd728/cloudflare-static/email-decode.min.js"></script><script src="https://unpkg.com/react@18.3.1/umd/react.development.js" integrity="sha384-hD6/rw4ppMLGNu3tX5cjIb+uRZ7UkRJ6BPkLpg4hAu/6onKUg4lLsHAs9EBPT82L" crossorigin="anonymous"></script>
+<script src="https://unpkg.com/react-dom@18.3.1/umd/react-dom.development.js" integrity="sha384-u6aeetuaXnQ38mYT8rp6sbXaQe3NL9t+IBXmnYxwkUI2Hw4bsp2Wvmx4yRQF1uAm" crossorigin="anonymous"></script>
+<script src="https://unpkg.com/@babel/standalone@7.29.0/babel.min.js" integrity="sha384-m08KidiNqLdpJqLq95G/LEi8Qvjl/xUYll3QILypMoQ65QorJ9Lvtp2RXYGBFj1y" crossorigin="anonymous"></script>
+<script type="text/babel" src="tweaks-panel.jsx"></script>
+
+<script type="text/babel">
+  const TWEAK_DEFAULTS = /*EDITMODE-BEGIN*/{
+    "palette": "sage",
+    "display": "source-serif",
+    "coverLayout": "loose"
+  }/*EDITMODE-END*/;
+
+  function TweaksApp(){
+    const [t, setTweak] = useTweaks(TWEAK_DEFAULTS);
+
+    React.useEffect(() => {
+      document.body.dataset.palette = t.palette;
+      document.body.dataset.display = t.display;
+      document.body.dataset.coverLayout = t.coverLayout;
+    }, [t.palette, t.display, t.coverLayout]);
+
+    const paletteSwatches = {
+      cream:  ["#f4ede0", "#1a1814", "#3d5343"],
+      ivory:  ["#faf7f0", "#15130f", "#a14a32"],
+      sage:   ["#e8eae0", "#1f2218", "#3d5343"],
+      paper:  ["#fdfbf6", "#111110", "#1a3a4a"],
+    };
+
+    return (
+      <TweaksPanel title="Tweaks">
+        <TweakSection label="Palette" />
+        <TweakColor
+          label="Theme"
+          value={paletteSwatches[t.palette]}
+          options={Object.values(paletteSwatches)}
+          onChange={(arr) => {
+            const key = Object.keys(paletteSwatches).find(
+              k => paletteSwatches[k].join() === arr.join()
+            ) || "cream";
+            setTweak('palette', key);
+          }}
+        />
+        <TweakSection label="Typography" />
+        <TweakSelect
+          label="Display face"
+          value={t.display}
+          options={[
+            {value:"source-serif", label:"Source Serif (default)"},
+            {value:"newsreader",   label:"Newsreader"},
+            {value:"cormorant",    label:"Cormorant Garamond"},
+          ]}
+          onChange={(v) => setTweak('display', v)}
+        />
+        <TweakSection label="Work grid" />
+        <TweakRadio
+          label="Density"
+          value={t.coverLayout}
+          options={['loose','regular','dense']}
+          onChange={(v) => setTweak('coverLayout', v)}
+        />
+      </TweaksPanel>
+    );
+  }
+
+  ReactDOM.createRoot(document.getElementById('tweaks-mount'))
+    .render(<TweaksApp />);
+</script>
+
+</body>
+</html>

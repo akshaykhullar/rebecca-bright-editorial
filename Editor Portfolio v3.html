@@ -1,0 +1,1145 @@
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="utf-8" />
+<meta name="viewport" content="width=device-width, initial-scale=1" />
+<title>Rebecca Bright Editorial</title>
+
+<link rel="preconnect" href="https://fonts.googleapis.com" />
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+<link href="https://fonts.googleapis.com/css2?family=Source+Serif+4:opsz,ital,wght@8..60,0,300;8..60,0,400;8..60,0,500;8..60,0,600;8..60,1,300;8..60,1,400;8..60,1,500&family=Newsreader:opsz,ital,wght@6..72,0,300;6..72,0,400;6..72,0,500;6..72,1,300;6..72,1,400&family=JetBrains+Mono:wght@400;500&display=swap" rel="stylesheet" />
+
+<style>
+  /* ─── Palette · cool literary, Scandinavian ───────────────── */
+  :root{
+    /* Client palette: #c2e5d3 #5e8f9b #5588ab #387fb0 #2371a8 */
+    --bg:        #f3efe6;          /* warm paper, not cool */
+    --bg-2:      #e9e3d4;          /* slightly deeper paper for bands */
+    --bg-soft:   #e7eee8;          /* the soft mint, used as a tint */
+    --bg-deep:   #1f3a4a;          /* deep ocean, for the shelf */
+    --ink:       #1f2a30;          /* warm ink, near-black with blue */
+    --ink-2:     #4d5e66;          /* secondary */
+    --ink-3:     #7c8a90;          /* tertiary / labels */
+    --rule:      rgba(31,42,48,.16);
+    --hair:      rgba(31,42,48,.32);
+    --accent:    #5e8f9b;          /* muted teal */
+    --accent-2:  #2371a8;          /* desaturated Scandinavian blue */
+    --accent-3:  #c2e5d3;          /* soft mint highlight */
+    --accent-4:  #5588ab;          /* dusty blue */
+    --paper:     #faf6ec;          /* book card */
+    --display:   "Source Serif 4", "Source Serif Pro", Georgia, serif;
+    --body:      "Source Serif 4", "Source Serif Pro", Georgia, serif;
+    --mono:      "JetBrains Mono", ui-monospace, SFMono-Regular, Menlo, monospace;
+  }
+
+  /* palette variants */
+  body[data-palette="ocean"]{
+    --bg:#f3efe6; --bg-2:#e9e3d4; --bg-soft:#e7eee8; --bg-deep:#1f3a4a;
+    --ink:#1f2a30; --ink-2:#4d5e66; --ink-3:#7c8a90;
+    --rule:rgba(31,42,48,.16); --hair:rgba(31,42,48,.32);
+    --accent:#5e8f9b; --accent-2:#2371a8; --accent-3:#c2e5d3; --accent-4:#5588ab;
+  }
+  body[data-palette="mist"]{
+    --bg:#eef2ec; --bg-2:#e1e7df; --bg-soft:#d6e3da; --bg-deep:#243a45;
+    --ink:#1f2a30; --ink-2:#4d5e66; --ink-3:#7c8a90;
+    --rule:rgba(31,42,48,.16); --hair:rgba(31,42,48,.32);
+    --accent:#5e8f9b; --accent-2:#387fb0; --accent-3:#c2e5d3; --accent-4:#5588ab;
+  }
+  body[data-palette="cobalt"]{
+    --bg:#f1ede2; --bg-2:#e6dfcc; --bg-soft:#dde6e8; --bg-deep:#173044;
+    --ink:#1a242c; --ink-2:#48565d; --ink-3:#788489;
+    --rule:rgba(26,36,44,.16); --hair:rgba(26,36,44,.32);
+    --accent:#5588ab; --accent-2:#2371a8; --accent-3:#c2e5d3; --accent-4:#387fb0;
+  }
+
+  body[data-display="newsreader"]{ --display:"Newsreader", Georgia, serif; }
+
+  *{box-sizing:border-box}
+  html,body{margin:0;padding:0}
+  html{ background:var(--bg); }
+  body{
+    background:var(--bg);
+    color:var(--ink);
+    font-family:var(--body);
+    font-size:18px;
+    line-height:1.55;
+    font-feature-settings:"liga","kern","onum";
+    -webkit-font-smoothing:antialiased;
+    text-rendering:optimizeLegibility;
+    transition:background-color .35s ease, color .35s ease;
+    position:relative;
+    overflow-x:hidden;
+  }
+  ::selection{background:var(--accent-3);color:var(--ink)}
+
+  /* ── Paper grain — subtle ──────────────────────────────── */
+  body::before{
+    content:""; position:fixed; inset:0; pointer-events:none; z-index:50;
+    opacity:.45;
+    mix-blend-mode:multiply;
+    background-image:url("data:image/svg+xml;utf8,<svg xmlns='http://www.w3.org/2000/svg' width='320' height='320'><filter id='n'><feTurbulence type='fractalNoise' baseFrequency='0.85' numOctaves='2' stitchTiles='stitch'/><feColorMatrix values='0 0 0 0 0.12 0 0 0 0 0.16 0 0 0 0 0.18 0 0 0 0.40 0'/></filter><rect width='100%25' height='100%25' filter='url(%23n)'/></svg>");
+    background-size:320px 320px;
+  }
+  body[data-grain="off"]::before{ display:none; }
+  body[data-grain="strong"]::before{ opacity:.75; }
+
+  a{color:inherit;text-decoration:none}
+
+  /* ─── Layout shell ───────────────────────────────────────── */
+  .wrap{ max-width:1280px; margin:0 auto; padding-inline:64px; position:relative; }
+  @media (max-width:720px){ .wrap{ padding-inline:24px; } }
+
+  /* ─── Top bar ────────────────────────────────────────────── */
+  header.top{
+    position:sticky;top:0;z-index:5;
+    background:color-mix(in oklab, var(--bg) 90%, transparent);
+    backdrop-filter:blur(10px);
+    border-bottom:1px solid var(--rule);
+  }
+  header.top .row{
+    display:flex;align-items:baseline;justify-content:space-between;
+    padding-block:20px 18px; gap:24px;
+  }
+  .mark{
+    font-family:var(--display); font-size:19px; font-weight:500;
+    letter-spacing:-.005em; color:var(--ink);
+  }
+  .mark .small{ color:var(--ink-2); font-style:italic; font-weight:400; }
+  nav.top-nav{
+    display:flex; gap:32px;
+    font-family:var(--display); font-style:italic; font-weight:400;
+    font-size:15.5px; color:var(--ink-2);
+  }
+  nav.top-nav a{ position:relative; }
+  nav.top-nav a:hover{ color:var(--accent-2); }
+  nav.top-nav a::after{
+    content:""; position:absolute; left:0; right:0; bottom:-3px; height:1px;
+    background:currentColor; transform:scaleX(0); transform-origin:right;
+    transition:transform .3s ease;
+  }
+  nav.top-nav a:hover::after{ transform:scaleX(1); transform-origin:left; }
+  @media (max-width:720px){ nav.top-nav{ gap:18px; font-size:13.5px; } }
+
+  /* ─── Section scaffolding ────────────────────────────────── */
+  section{ padding-block:120px; position:relative; }
+  @media (max-width:720px){ section{ padding-block:72px; } }
+
+  /* big editorial section header */
+  .section-head{
+    display:grid; grid-template-columns: 1fr; gap:14px;
+    margin-bottom:64px;
+    align-items:baseline;
+  }
+  .section-head .label{
+    font-family:var(--mono); font-size:11.5px; letter-spacing:.22em;
+    text-transform:uppercase; color:var(--accent-2);
+    display:flex; align-items:center; gap:14px;
+  }
+  .section-head .label .ln{
+    flex:0 1 96px; height:1px; background:var(--rule);
+  }
+  .section-head h2{
+    font-family:var(--display); font-weight:400;
+    font-size:clamp(48px, 6.4vw, 96px); line-height:1; letter-spacing:-.025em;
+    margin:0; color:var(--ink); text-wrap:balance;
+  }
+  .section-head h2 em{ font-style:italic; color:var(--accent-2); font-weight:300; }
+  .section-head .sub{
+    font-family:var(--display); font-style:italic; font-size:18px;
+    color:var(--ink-2); max-width:560px; margin-top:10px; line-height:1.5;
+  }
+
+  /* ─── Hero / About ───────────────────────────────────────── */
+  .hero{ padding-block:88px 96px; }
+
+  .hero .eyebrow-line{
+    font-family:var(--display); font-style:italic; font-size:16px;
+    color:var(--ink-2); margin-bottom:36px;
+    display:flex; align-items:center; gap:12px;
+  }
+  .hero .eyebrow-line .dot{
+    width:6px; height:6px; border-radius:50%; background:var(--accent-2);
+    display:inline-block;
+  }
+
+  .hero h1{
+    font-family:var(--display); font-weight:400;
+    font-size:clamp(48px, 7.4vw, 116px); line-height:.99;
+    letter-spacing:-.025em; margin:0 0 40px; text-wrap:balance;
+    max-width:14ch;
+  }
+  .hero h1 .it{ font-style:italic; font-weight:300; color:var(--accent-2); }
+
+  .hero .support{
+    font-family:var(--display); font-size:clamp(20px, 1.8vw, 26px);
+    line-height:1.45; color:var(--ink); margin:0 0 64px;
+    max-width:36ch; text-wrap:pretty; font-weight:400;
+  }
+  .hero .support em{ font-style:italic; color:var(--ink-2); font-weight:300; }
+
+  .hero-grid{
+    display:grid;
+    grid-template-columns: 1.45fr 1fr;
+    gap:88px;
+    align-items:start;
+  }
+  @media (max-width:1000px){ .hero-grid{ grid-template-columns:1fr; gap:56px; } }
+
+  /* About column — bio in 3 paragraphs, breathing room */
+  .about{ display:flex; flex-direction:column; gap:0; }
+
+  .about .meet{
+    font-family:var(--mono); font-size:11.5px; letter-spacing:.22em;
+    text-transform:uppercase; color:var(--accent-2);
+    display:flex; align-items:center; gap:14px; margin-bottom:24px;
+  }
+  .about .meet .ln{ flex:1; height:1px; background:var(--rule); max-width:120px; }
+
+  .about-h{
+    font-family:var(--display); font-style:italic; font-weight:400;
+    font-size:clamp(28px, 2.6vw, 36px); line-height:1.18;
+    letter-spacing:-.012em; color:var(--ink);
+    margin:0 0 36px;
+    text-wrap:balance;
+  }
+  .about-h em{ color:var(--accent-2); font-style:italic; }
+
+  .about p{
+    font-family:var(--display); font-size:19px; line-height:1.65;
+    color:var(--ink); margin:0 0 24px; max-width:54ch;
+    text-wrap:pretty;
+  }
+  .about p:last-of-type{ margin-bottom:0; }
+  .about p .lead-cap{
+    font-family:var(--display); font-style:italic; font-weight:400;
+    color:var(--accent-2);
+    font-size:5em; line-height:.85;
+    float:left; padding:8px 14px 0 0; margin-top:6px;
+  }
+
+  .about .credentials{
+    margin-top:48px; padding-top:28px;
+    border-top:1px solid var(--rule);
+    display:grid; grid-template-columns: repeat(3, 1fr); gap:32px;
+  }
+  @media (max-width:680px){ .about .credentials{ grid-template-columns:1fr 1fr; } }
+  .about .credentials .item .lbl{
+    font-family:var(--mono); font-size:10.5px; letter-spacing:.18em;
+    text-transform:uppercase; color:var(--ink-3); margin-bottom:6px;
+  }
+  .about .credentials .item .val{
+    font-family:var(--display); font-size:16.5px; color:var(--ink);
+    line-height:1.35;
+  }
+  .about .credentials .item .val em{ color:var(--ink-2); font-style:italic; font-weight:300; }
+
+  /* Portrait column */
+  .portrait-col{
+    position:sticky; top:104px;
+    display:flex; flex-direction:column; gap:20px;
+  }
+  @media (max-width:1000px){ .portrait-col{ position:static; } }
+
+  .portrait{
+    position:relative;
+    aspect-ratio: 4 / 5;
+    background:
+      linear-gradient(180deg, var(--accent-3) 0%, color-mix(in oklab, var(--accent-3) 60%, var(--paper)) 100%);
+    overflow:hidden;
+    box-shadow:
+      0 1px 0 rgba(255,255,255,.4) inset,
+      0 14px 30px -16px rgba(31,58,74,.35),
+      0 30px 60px -32px rgba(31,58,74,.40);
+  }
+  /* soft natural-light vignette */
+  .portrait::before{
+    content:""; position:absolute; inset:0;
+    background:
+      radial-gradient(ellipse 80% 60% at 30% 25%, rgba(255,255,255,.55), transparent 70%),
+      radial-gradient(ellipse 70% 55% at 80% 95%, rgba(31,58,74,.18), transparent 70%);
+    pointer-events:none;
+  }
+  /* subtle grain in portrait */
+  .portrait::after{
+    content:""; position:absolute; inset:0; pointer-events:none;
+    opacity:.5; mix-blend-mode:multiply;
+    background-image:url("data:image/svg+xml;utf8,<svg xmlns='http://www.w3.org/2000/svg' width='240' height='240'><filter id='g'><feTurbulence type='fractalNoise' baseFrequency='0.9' numOctaves='2' stitchTiles='stitch'/><feColorMatrix values='0 0 0 0 0.12 0 0 0 0 0.18 0 0 0 0 0.20 0 0 0 0.5 0'/></filter><rect width='100%25' height='100%25' filter='url(%23g)'/></svg>");
+    background-size:240px 240px;
+  }
+
+  /* portrait silhouette — soft, natural-light, abstract */
+  .portrait .figure{
+    position:absolute; inset:0;
+    display:flex; align-items:flex-end; justify-content:center;
+  }
+  .portrait .figure svg{
+    width:78%; height:auto; max-height:88%;
+    filter: drop-shadow(0 10px 18px rgba(31,58,74,.25));
+  }
+
+  .portrait .placeholder-tag{
+    position:absolute; left:18px; top:18px;
+    font-family:var(--mono); font-size:10px; letter-spacing:.18em;
+    text-transform:uppercase; color:rgba(31,42,48,.55);
+    background:rgba(255,255,255,.5);
+    padding:6px 10px; border:1px solid rgba(31,42,48,.18);
+    backdrop-filter:blur(6px);
+  }
+
+  .portrait-caption{
+    display:flex; justify-content:space-between; gap:16px; align-items:baseline;
+    padding-top:6px;
+  }
+  .portrait-caption .name{
+    font-family:var(--display); font-style:italic; font-size:15.5px;
+    color:var(--ink-2);
+  }
+  .portrait-caption .meta{
+    font-family:var(--mono); font-size:10.5px; letter-spacing:.18em;
+    text-transform:uppercase; color:var(--ink-3);
+  }
+
+  /* ornament divider */
+  .divider{
+    display:flex; align-items:center; justify-content:center; gap:18px;
+    color:var(--ink-3); padding-block:16px;
+  }
+  .divider::before, .divider::after{
+    content:""; flex:1; height:1px; background:var(--rule); max-width:240px;
+  }
+  .divider .glyph{
+    font-family:var(--display); font-style:italic; font-size:20px;
+    color:var(--accent-2);
+  }
+
+  /* ─── Services (now above projects) ─────────────────────── */
+  .services-section{ background:var(--bg-soft); position:relative; }
+  .services-section::before, .services-section::after{
+    content:""; position:absolute; left:0; right:0; height:1px; background:var(--rule);
+  }
+  .services-section::before{ top:0; }
+  .services-section::after{ bottom:0; }
+
+  .services{
+    display:block;
+  }
+
+  .svc-list{
+    list-style:none; margin:0; padding:0;
+    display:grid; grid-template-columns:1fr 1fr; gap:0 56px;
+    border-top:1px solid var(--rule);
+  }
+  @media (max-width:720px){ .svc-list{ grid-template-columns:1fr; gap:0; } }
+  .svc-list li{
+    display:grid; grid-template-columns:54px 1fr;
+    gap:24px; align-items:baseline;
+    padding:26px 0;
+    border-bottom:1px solid var(--rule);
+    position:relative;
+    transition:padding .25s ease;
+  }
+  .svc-list li:hover{ padding-left:8px; }
+  .svc-list li::after{
+    content:""; position:absolute; left:0; right:0; bottom:-1px; height:1px;
+    background:var(--accent-2); transform:scaleX(0); transform-origin:left;
+    transition:transform .4s ease;
+  }
+  .svc-list li:hover::after{ transform:scaleX(1); }
+  .svc-list .num{
+    font-family:var(--mono); font-size:11px; letter-spacing:.16em;
+    color:var(--accent-2); padding-top:8px;
+  }
+  .svc-list .name{
+    font-family:var(--display); font-size:24px; font-weight:400;
+    letter-spacing:-.012em; line-height:1.2;
+  }
+  .svc-list .name em{ font-style:italic; color:var(--ink-2); font-weight:300; }
+  @media (max-width:820px){
+    .svc-list li{ grid-template-columns:38px 1fr; }
+  }
+
+  /* ─── Selected Projects (book shelf) ───────────────────── */
+  .work-section{ padding-bottom:0; padding-top:120px; }
+  @media (max-width:720px){ .work-section{ padding-top:72px; } }
+
+  .work-head{
+    display:grid; grid-template-columns:1.3fr 1fr; gap:48px;
+    align-items:end; margin-bottom:64px;
+  }
+  @media (max-width:900px){ .work-head{ grid-template-columns:1fr; gap:24px; } }
+  .work-head .blurb{
+    font-family:var(--display); font-size:17px; line-height:1.6;
+    color:var(--ink-2); max-width:420px;
+  }
+
+  .shelf{
+    margin-top:24px;
+    background:var(--bg-deep);
+    color:#e6edf2;
+    position:relative;
+  }
+  .shelf::before{
+    content:""; position:absolute; left:0; right:0; top:0; height:1px;
+    background:rgba(255,255,255,.08);
+  }
+  .shelf-inner{
+    max-width:1280px; margin:0 auto;
+    padding:104px 64px 96px;
+    position:relative;
+  }
+  @media (max-width:720px){ .shelf-inner{ padding:72px 24px 64px; } }
+  .shelf-inner::before{
+    content:""; position:absolute; inset:0;
+    background-image: radial-gradient(ellipse 80% 50% at 50% 0%, rgba(194,229,211,.06), transparent 70%);
+    pointer-events:none;
+  }
+
+  .shelf-marquee{
+    font-family:var(--display); font-style:italic; font-size:15.5px;
+    color:rgba(230,237,242,.7);
+    display:flex; align-items:center; gap:14px; margin-bottom:48px;
+  }
+  .shelf-marquee .ln{ flex:1; height:1px; background:rgba(230,237,242,.18); max-width:200px; }
+  .shelf-marquee .num{
+    font-family:var(--mono); font-size:11px; letter-spacing:.18em; text-transform:uppercase;
+    color:rgba(230,237,242,.55);
+  }
+
+  .books{
+    display:grid;
+    grid-template-columns: repeat(12, 1fr);
+    gap:64px 32px;
+    align-items:end;
+  }
+  @media (max-width:900px){ .books{ gap:48px 22px; } }
+
+  .book{ position:relative; display:flex; flex-direction:column; gap:14px; }
+  .book .frame{
+    background:var(--paper);
+    box-shadow:
+      inset 6px 0 12px -6px rgba(0,0,0,.18),
+      0 1px 0 rgba(0,0,0,.06),
+      0 14px 28px -14px rgba(0,0,0,.55),
+      0 30px 50px -30px rgba(0,0,0,.55);
+    aspect-ratio: 2 / 3;
+    position:relative; overflow:hidden;
+    transform: rotate(var(--tilt, 0deg)) translateY(0);
+    transition: transform .55s cubic-bezier(.2,.7,.2,1), box-shadow .4s ease;
+  }
+  .book:hover .frame{
+    transform: rotate(0deg) translateY(-6px);
+    box-shadow:
+      inset 6px 0 12px -6px rgba(0,0,0,.18),
+      0 1px 0 rgba(0,0,0,.06),
+      0 22px 40px -16px rgba(0,0,0,.65),
+      0 50px 70px -30px rgba(0,0,0,.55);
+  }
+  .book .frame .typo{
+    position:absolute; inset:0;
+    padding:24px 22px 22px 28px;
+    display:flex; flex-direction:column; gap:14px;
+  }
+  .book .frame .typo .pub{
+    font-family:var(--mono); font-size:9.5px; letter-spacing:.18em;
+    text-transform:uppercase; color:var(--ink-3);
+  }
+  .book .frame .typo .ttl{
+    font-family:var(--display); font-weight:500;
+    font-size:clamp(13px, 1vw, 17px); line-height:1.08;
+    letter-spacing:-.012em; color:var(--ink);
+    text-wrap:balance; overflow-wrap:break-word; hyphens:auto;
+    margin-top:auto;
+  }
+  .book .frame .typo .ttl em{ font-style:italic; font-weight:400; }
+  .book .frame .typo .au{
+    font-family:var(--display); font-style:italic; font-size:12.5px;
+    line-height:1.25; color:var(--ink-2); margin-top:4px;
+    text-wrap:balance; overflow-wrap:break-word;
+  }
+  .book .frame .typo .rule{ height:1px; background:var(--hair); width:48px; }
+
+  .book figcaption{ color:#cdd8de; padding-top:4px; }
+  .book figcaption .t{
+    font-family:var(--display); font-size:15.5px; letter-spacing:-.005em;
+    color:#e6edf2; line-height:1.25;
+  }
+  .book figcaption .t em{
+    font-style:italic; font-weight:300; color:rgba(230,237,242,.7);
+    display:block; font-size:13.5px; margin-top:2px;
+  }
+  .book figcaption .y{
+    font-family:var(--mono); font-size:10.5px; letter-spacing:.14em;
+    color:rgba(230,237,242,.55); margin-top:6px;
+  }
+  .book figcaption .y .genre{ color:var(--accent-3); }
+
+  /* Cover variants — recolored to fit cool palette but with paper warmth */
+  .book .frame.v-cream{    background:#f4ecd6; }
+  .book .frame.v-mist{     background:#c2e5d3; }
+  .book .frame.v-mist .ttl, .book .frame.v-mist .au{ color:#1f3a4a; }
+  .book .frame.v-mist .pub{ color:rgba(31,58,74,.6); }
+  .book .frame.v-mist .rule{ background:rgba(31,58,74,.4); }
+
+  .book .frame.v-teal{     background:#5e8f9b; }
+  .book .frame.v-teal .ttl, .book .frame.v-teal .au{ color:#f3efe6; }
+  .book .frame.v-teal .pub{ color:rgba(243,239,230,.7); }
+  .book .frame.v-teal .rule{ background:rgba(243,239,230,.4); }
+
+  .book .frame.v-blue{     background:#2371a8; }
+  .book .frame.v-blue .ttl, .book .frame.v-blue .au{ color:#e7f2f8; }
+  .book .frame.v-blue .pub{ color:rgba(231,242,248,.7); }
+  .book .frame.v-blue .rule{ background:rgba(231,242,248,.4); }
+
+  .book .frame.v-deep{     background:#173044; }
+  .book .frame.v-deep .ttl, .book .frame.v-deep .au{ color:#c2e5d3; }
+  .book .frame.v-deep .pub{ color:rgba(194,229,211,.7); }
+  .book .frame.v-deep .rule{ background:rgba(194,229,211,.4); }
+
+  .book .frame.v-paper{    background:#e9e3d4; }
+  .book .frame.v-dust{     background:#5588ab; }
+  .book .frame.v-dust .ttl, .book .frame.v-dust .au{ color:#f3efe6; }
+  .book .frame.v-dust .pub{ color:rgba(243,239,230,.7); }
+  .book .frame.v-dust .rule{ background:rgba(243,239,230,.4); }
+
+  .book .frame.v-sage{     background:#a9c3b6; }
+  .book .frame.v-sage .ttl, .book .frame.v-sage .au{ color:#1f3a4a; }
+  .book .frame.v-sage .pub{ color:rgba(31,58,74,.6); }
+  .book .frame.v-sage .rule{ background:rgba(31,58,74,.4); }
+
+  /* asymmetric spans */
+  .book.b1{ grid-column: span 3; --tilt:-1.2deg; }
+  .book.b2{ grid-column: span 3; transform:translateY(28px); --tilt:1.6deg; }
+  .book.b3{ grid-column: span 3; --tilt:-0.6deg; }
+  .book.b4{ grid-column: span 3; transform:translateY(36px); --tilt:1.2deg; }
+  .book.b5{ grid-column: span 3; transform:translateY(0); --tilt:-1.4deg; }
+  .book.b6{ grid-column: span 3; transform:translateY(24px); --tilt:0.8deg; }
+  .book.b7{ grid-column: span 3; --tilt:-0.8deg; }
+  .book.b8{ grid-column: span 3; transform:translateY(20px); --tilt:1deg; }
+
+  @media (max-width:1180px){
+    .book.b1,.book.b2,.book.b3,.book.b4,.book.b5,.book.b6,.book.b7,.book.b8{ grid-column: span 6; transform:none; --tilt:0deg; }
+  }
+  @media (max-width:560px){
+    .book.b1,.book.b2,.book.b3,.book.b4,.book.b5,.book.b6,.book.b7,.book.b8{ grid-column: span 12; }
+  }
+
+  .shelf-foot{
+    margin-top:64px; padding-top:24px; border-top:1px solid rgba(255,255,255,.08);
+    display:flex; justify-content:space-between; gap:24px; align-items:baseline;
+    font-family:var(--display); font-style:italic; font-size:14.5px;
+    color:rgba(230,237,242,.6);
+  }
+  .shelf-foot .more{
+    font-family:var(--mono); font-style:normal; font-size:11px; letter-spacing:.16em;
+    text-transform:uppercase; color:rgba(230,237,242,.85);
+  }
+
+  /* ─── Kind Words (rotating quotes) ──────────────────────── */
+  .kind{ padding-block:140px; background:var(--bg); }
+
+  .kind-grid{
+    display:grid;
+    grid-template-columns: 1fr;
+    max-width:1000px; margin:0 auto;
+  }
+  .kind .quotes{
+    position:relative;
+    min-height:280px;
+    margin-top:8px;
+  }
+  .kind .q{
+    position:absolute; inset:0;
+    opacity:0; transition:opacity .9s ease, transform .9s ease;
+    transform: translateY(8px);
+    pointer-events:none;
+  }
+  .kind .q.is-active{ opacity:1; transform:translateY(0); pointer-events:auto; }
+
+  .kind blockquote{
+    margin:0;
+    font-family:var(--display); font-weight:400; font-style:italic;
+    font-size:clamp(26px, 3vw, 42px); line-height:1.3;
+    letter-spacing:-.012em;
+    color:var(--ink); text-wrap:balance;
+    padding-left:0; position:relative;
+  }
+  /* the leading mark is set inline as part of the quote — no awkward floating mark */
+  .kind blockquote .mark{
+    color:var(--accent-2); font-style:italic; font-weight:300;
+    margin-right:.05em;
+  }
+  .kind cite{
+    display:block; margin-top:36px;
+    font-family:var(--mono); font-size:11.5px; letter-spacing:.18em;
+    text-transform:uppercase; color:var(--ink-3); font-style:normal;
+  }
+  .kind cite em{
+    color:var(--ink-2); font-style:italic; font-family:var(--display);
+    text-transform:none; letter-spacing:0; font-size:14.5px; margin-left:6px;
+  }
+
+  .kind-controls{
+    display:flex; gap:10px; margin-top:48px; align-items:center;
+  }
+  .kind-controls .pip{
+    width:22px; height:2px; background:var(--rule); border:0; padding:0; cursor:pointer;
+    transition:background .3s ease, width .3s ease;
+  }
+  .kind-controls .pip.is-active{ background:var(--accent-2); width:36px; }
+  .kind-controls .pip:hover{ background:var(--ink-3); }
+  .kind-controls .count{
+    font-family:var(--mono); font-size:10.5px; letter-spacing:.16em;
+    text-transform:uppercase; color:var(--ink-3); margin-left:18px;
+  }
+
+  /* ─── Contact ───────────────────────────────────────────── */
+  .contact-section{ background:var(--bg-2); border-top:1px solid var(--rule); }
+
+  .contact{
+    display:grid; grid-template-columns: 1.15fr 1fr; gap:88px; align-items:end;
+  }
+  @media (max-width:900px){ .contact{ grid-template-columns:1fr; gap:40px; align-items:start; } }
+  .contact h2{
+    font-family:var(--display); font-weight:400;
+    font-size:clamp(48px, 6.4vw, 96px); line-height:.98;
+    letter-spacing:-.025em; margin:0 0 28px; text-wrap:balance;
+  }
+  .contact h2 em{ font-style:italic; color:var(--accent-2); font-weight:300; }
+  .contact .blurb{
+    max-width:520px; color:var(--ink-2); font-size:18.5px; line-height:1.6;
+  }
+  .contact .blurb em{ font-style:italic; color:var(--ink); }
+
+  .contact .links{ display:flex; flex-direction:column; gap:0; }
+  .contact .links a{
+    display:flex; align-items:baseline; justify-content:space-between; gap:24px;
+    padding:26px 0;
+    border-top:1px solid var(--rule);
+    font-family:var(--display); font-size:24px; letter-spacing:-.005em;
+    transition:color .2s ease, padding .25s ease;
+  }
+  .contact .links a:last-child{ border-bottom:1px solid var(--rule); }
+  .contact .links a:hover{ color:var(--accent-2); padding-left:10px; }
+  .contact .links a .lbl{
+    font-family:var(--mono); font-size:10.5px; letter-spacing:.18em;
+    text-transform:uppercase; color:var(--ink-3); flex-shrink:0;
+  }
+  .contact .links a .arrow{ display:inline-block; transition:transform .25s ease; margin-left:8px; }
+  .contact .links a:hover .arrow{ transform:translateX(6px); color:var(--accent-2); }
+
+  /* ─── Footer ────────────────────────────────────────────── */
+  footer.bottom{
+    padding-block:36px 48px;
+    display:grid; grid-template-columns:1fr 1fr 1fr; gap:24px; align-items:baseline;
+    font-family:var(--mono); font-size:11px; letter-spacing:.14em;
+    text-transform:uppercase; color:var(--ink-3);
+    border-top:1px solid var(--rule);
+  }
+  footer.bottom .center{ text-align:center; }
+  footer.bottom .right{ text-align:right; }
+  footer.bottom em{
+    font-family:var(--display); font-style:italic; text-transform:none;
+    letter-spacing:0; color:var(--ink-2); font-size:14px;
+  }
+  @media (max-width:720px){
+    footer.bottom{ grid-template-columns:1fr; text-align:left !important; }
+    footer.bottom .center, footer.bottom .right{ text-align:left; }
+  }
+
+  /* tweaks panel mount */
+  #tweaks-mount{ position:fixed; inset:0; pointer-events:none; z-index:2147483646; }
+  #tweaks-mount > *{ pointer-events:auto; }
+
+</style>
+</head>
+<body data-palette="ocean" data-display="source-serif" data-grain="on">
+
+<header class="top" data-screen-label="Top bar">
+  <div class="wrap row">
+    <div class="mark">
+      Rebecca Bright <span class="small">Editorial</span>
+    </div>
+    <nav class="top-nav">
+      <a href="#about">About</a>
+      <a href="#services">Services</a>
+      <a href="#projects">Selected Projects</a>
+      <a href="#kind-words">Kind Words</a>
+      <a href="#contact">Contact</a>
+    </nav>
+  </div>
+</header>
+
+<main>
+
+<!-- ─── HERO / ABOUT ──────────────────────────────────────────── -->
+<section class="hero wrap" id="about" data-screen-label="01 Hero / About">
+
+  <h1>Freelance editor for nonfiction with impact</h1>
+
+  <p class="support">
+</p>
+
+  <div class="hero-grid">
+
+    <!-- About / bio column -->
+    <div class="about">
+      <div class="meet">
+        <span>Meet the editor</span>
+        <span class="ln"></span>
+      </div>
+
+      <h3 class="about-h">
+        A reader first, an editor second &mdash; <em>and a quiet collaborator on the work in between.</em>
+      </h3>
+
+      <p>
+        <span class="lead-cap">I</span>'m a freelance editor specializing in nonfiction with impact, from popular science and memoir to guidebooks and comics. For 10 years, I was an acquiring editor at Island Press, where I collaborated with award-winning authors to bring their passion and knowledge onto the page.
+      </p>
+
+      <p>
+        That decade taught me how a book is really made: not at the keyboard alone, but in the long conversations between writer and reader. I'm interested in the architecture under a chapter, the cadence of a paragraph, and the small, careful choices that make ideas land.
+      </p>
+
+      <p>
+        I work best with writers who care about craft &mdash; researchers translating their work for general readers, memoirists looking for shape and restraint, journalists building their first long-form, comics artists braiding image and text. Whatever the form, my goal is the same: to help you write the book you actually mean to write.
+      </p>
+
+      <div class="credentials">
+        <div class="item">
+          <div class="lbl">Background</div>
+          <div class="val">10 years <em>acquiring editor, Island Press</em></div>
+        </div>
+        <div class="item">
+          <div class="lbl">Genres</div>
+          <div class="val">Popular science, memoir, <em>guidebooks &amp; comics</em></div>
+        </div>
+        <div class="item">
+          <div class="lbl">Working with</div>
+          <div class="val">Authors worldwide <em>— remote &amp; async</em></div>
+        </div>
+      </div>
+    </div>
+
+    <!-- Portrait column -->
+    <aside class="portrait-col">
+      <figure class="portrait" aria-label="Portrait of Rebecca Bright">
+        <span class="placeholder-tag">Portrait · drop image</span>
+        <div class="figure" aria-hidden="true">
+          <!-- soft, abstract editorial silhouette — natural-light, Scandinavian -->
+          <svg viewBox="0 0 220 280" xmlns="http://www.w3.org/2000/svg">
+            <defs>
+              <linearGradient id="hair" x1="0" x2="0" y1="0" y2="1">
+                <stop offset="0" stop-color="#34525e"/>
+                <stop offset="1" stop-color="#1f3a4a"/>
+              </linearGradient>
+              <linearGradient id="skin" x1="0" x2="0" y1="0" y2="1">
+                <stop offset="0" stop-color="#e8d2b9"/>
+                <stop offset="1" stop-color="#d2b294"/>
+              </linearGradient>
+              <linearGradient id="shirt" x1="0" x2="0" y1="0" y2="1">
+                <stop offset="0" stop-color="#f3efe6"/>
+                <stop offset="1" stop-color="#dcd6c5"/>
+              </linearGradient>
+            </defs>
+            <!-- shoulders / shirt -->
+            <path d="M10 280 C 30 220, 70 200, 110 200 C 150 200, 190 220, 210 280 Z" fill="url(#shirt)"/>
+            <!-- neck -->
+            <rect x="96" y="170" width="28" height="38" rx="10" fill="url(#skin)"/>
+            <!-- head -->
+            <ellipse cx="110" cy="120" rx="46" ry="56" fill="url(#skin)"/>
+            <!-- hair, soft pulled back -->
+            <path d="M62 122 C 58 80, 80 50, 110 48 C 142 48, 164 78, 160 122 C 158 100, 142 86, 130 84 C 118 92, 102 92, 90 84 C 78 86, 64 100, 62 122 Z" fill="url(#hair)"/>
+            <!-- soft cheek shadow -->
+            <ellipse cx="135" cy="140" rx="10" ry="6" fill="rgba(0,0,0,.06)"/>
+          </svg>
+        </div>
+      </figure>
+      <figcaption class="portrait-caption">
+        <span class="name">Rebecca Bright</span>
+        <span class="meta">Editor · D.C.</span>
+      </figcaption>
+    </aside>
+
+  </div>
+</section>
+
+<div class="divider wrap"><span class="glyph">❦</span></div>
+
+<!-- ─── SERVICES (above projects) ─────────────────────────────── -->
+<section class="services-section" id="services" data-screen-label="02 Services">
+  <div class="wrap">
+
+    <div class="section-head">
+      <div class="label"><span class="ln"></span><span>Services</span></div>
+      <h2>How we might <em>work together.</em></h2>
+    </div>
+
+    <div class="services">
+      <ul class="svc-list">
+        <li>
+          <span class="num">01</span>
+          <span class="name">Book Coaching</span>
+        </li>
+        <li>
+          <span class="num">02</span>
+          <span class="name">Proposal Editing, <em>Writing &amp; Consultation</em></span>
+        </li>
+        <li>
+          <span class="num">03</span>
+          <span class="name">Manuscript Assessment <em>/ Beta Reading</em></span>
+        </li>
+        <li>
+          <span class="num">04</span>
+          <span class="name">Developmental Editing</span>
+        </li>
+        <li>
+          <span class="num">05</span>
+          <span class="name">Line Editing</span>
+        </li>
+        <li>
+          <span class="num">06</span>
+          <span class="name">Copywriting</span>
+        </li>
+        <li>
+          <span class="num">07</span>
+          <span class="name">Permissions Consultation</span>
+        </li>
+      </ul>
+    </div>
+  </div>
+</section>
+
+<!-- ─── SELECTED PROJECTS ─────────────────────────────────────── -->
+<section class="work-section" id="projects" data-screen-label="03 Selected Projects">
+  <div class="wrap">
+    <div class="section-head">
+      <div class="label"><span class="ln"></span><span>Selected Projects</span></div>
+      <h2>A decade of nonfiction <em>with impact.</em></h2>
+      <p class="sub">
+        Eight titles from a longer shelf — popular science, memoir, guidebooks
+        and comics shaped from proposal to print.
+      </p>
+    </div>
+  </div>
+
+  <div class="shelf">
+    <div class="shelf-inner">
+
+      <div class="shelf-marquee">
+        <span class="num">A SHORT SHELF</span>
+        <span class="ln"></span>
+        <em>Eight titles, 2019&nbsp;–&nbsp;2024</em>
+        <span class="ln"></span>
+        <span class="num">8 / 8</span>
+      </div>
+
+      <div class="books">
+
+        <figure class="book b1">
+          <div class="frame v-cream">
+            <div class="typo">
+              <div class="pub">Island Press · 2024</div>
+              <div class="rule"></div>
+              <div class="ttl">The Quiet Architecture <em>of Rivers</em></div>
+              <div class="au">A. Marlowe</div>
+            </div>
+          </div>
+          <figcaption>
+            <div class="t">The Quiet Architecture of Rivers<em>A. Marlowe</em></div>
+            <div class="y"><span class="genre">POPULAR SCIENCE</span> · 2024</div>
+          </figcaption>
+        </figure>
+
+        <figure class="book b2">
+          <div class="frame v-blue">
+            <div class="typo">
+              <div class="pub">Memoir · 2023</div>
+              <div class="rule"></div>
+              <div class="ttl">Borrowed Light</div>
+              <div class="au">A memoir · J. Reyes</div>
+            </div>
+          </div>
+          <figcaption>
+            <div class="t">Borrowed Light<em>J. Reyes</em></div>
+            <div class="y"><span class="genre">MEMOIR</span> · 2023</div>
+          </figcaption>
+        </figure>
+
+        <figure class="book b3">
+          <div class="frame v-deep">
+            <div class="typo">
+              <div class="pub">Field Notes Press · 2023</div>
+              <div class="rule"></div>
+              <div class="ttl">Field Notes from the <em>Understory</em></div>
+              <div class="au">M. Okafor</div>
+            </div>
+          </div>
+          <figcaption>
+            <div class="t">Field Notes from the Understory<em>M. Okafor</em></div>
+            <div class="y"><span class="genre">POPULAR SCIENCE</span> · 2023</div>
+          </figcaption>
+        </figure>
+
+        <figure class="book b4">
+          <div class="frame v-mist">
+            <div class="typo">
+              <div class="pub">Guidebook · 2022</div>
+              <div class="rule"></div>
+              <div class="ttl">A Guide to Slow <em>Travel</em></div>
+              <div class="au">S. Whitten</div>
+            </div>
+          </div>
+          <figcaption>
+            <div class="t">A Guide to Slow Travel<em>S. Whitten</em></div>
+            <div class="y"><span class="genre">GUIDEBOOK</span> · 2022</div>
+          </figcaption>
+        </figure>
+
+        <figure class="book b5">
+          <div class="frame v-teal">
+            <div class="typo">
+              <div class="pub">Essays · 2022</div>
+              <div class="rule"></div>
+              <div class="ttl">The Long Bright <em>Land</em></div>
+              <div class="au">D. Holloway</div>
+            </div>
+          </div>
+          <figcaption>
+            <div class="t">The Long Bright Land<em>D. Holloway</em></div>
+            <div class="y"><span class="genre">ESSAYS</span> · 2022</div>
+          </figcaption>
+        </figure>
+
+        <figure class="book b6">
+          <div class="frame v-sage">
+            <div class="typo">
+              <div class="pub">Graphic memoir · 2021</div>
+              <div class="rule"></div>
+              <div class="ttl">Soft <em>Tools</em></div>
+              <div class="au">N. Iyer · illustrated</div>
+            </div>
+          </div>
+          <figcaption>
+            <div class="t">Soft Tools<em>N. Iyer</em></div>
+            <div class="y"><span class="genre">COMIC / MEMOIR</span> · 2021</div>
+          </figcaption>
+        </figure>
+
+        <figure class="book b7">
+          <div class="frame v-dust">
+            <div class="typo">
+              <div class="pub">Reportage · 2020</div>
+              <div class="rule"></div>
+              <div class="ttl">After the <em>Dam</em></div>
+              <div class="au">R. Castellanos</div>
+            </div>
+          </div>
+          <figcaption>
+            <div class="t">After the Dam<em>R. Castellanos</em></div>
+            <div class="y"><span class="genre">REPORTAGE</span> · 2020</div>
+          </figcaption>
+        </figure>
+
+        <figure class="book b8">
+          <div class="frame v-paper">
+            <div class="typo">
+              <div class="pub">Field guide · 2019</div>
+              <div class="rule"></div>
+              <div class="ttl">Common Birds, <em>Common Names</em></div>
+              <div class="au">L. Pham</div>
+            </div>
+          </div>
+          <figcaption>
+            <div class="t">Common Birds, Common Names<em>L. Pham</em></div>
+            <div class="y"><span class="genre">FIELD GUIDE</span> · 2019</div>
+          </figcaption>
+        </figure>
+
+      </div>
+
+      <div class="shelf-foot">
+        <em>Full project list available on request.</em>
+        <span class="more">→ Available on request</span>
+      </div>
+
+    </div>
+  </div>
+</section>
+
+<!-- ─── KIND WORDS (rotating quotes) ──────────────────────────── -->
+<section class="kind wrap" id="kind-words" data-screen-label="04 Kind Words">
+
+  <div class="section-head">
+    <div class="label"><span class="ln"></span><span>Kind Words</span></div>
+    <h2>What writers <em>have said.</em></h2>
+  </div>
+
+  <div class="kind-grid">
+    <div class="quotes" id="kindQuotes">
+
+      <div class="q is-active">
+        <blockquote>
+          <span class="mark">&ldquo;</span>Rebecca reads a manuscript the way the best editors do &mdash; generously, but with an ear pitched for the sentence underneath the sentence. She made my book what it wanted to be.&rdquo;
+        </blockquote>
+        <cite>An author <em>— popular science, 2023</em></cite>
+      </div>
+
+      <div class="q">
+        <blockquote>
+          <span class="mark">&ldquo;</span>She has the rare gift of holding the whole architecture of a book in her head while still caring about a comma. I trusted her completely.&rdquo;
+        </blockquote>
+        <cite>An author <em>— memoir, 2022</em></cite>
+      </div>
+
+      <div class="q">
+        <blockquote>
+          <span class="mark">&ldquo;</span>Working with Rebecca felt like being read by my smartest friend &mdash; the one who tells you the truth, kindly. My proposal sold within a month.&rdquo;
+        </blockquote>
+        <cite>An author <em>— guidebook, 2024</em></cite>
+      </div>
+
+    </div>
+
+    <div class="kind-controls">
+      <button class="pip is-active" data-i="0" aria-label="Quote 1"></button>
+      <button class="pip" data-i="1" aria-label="Quote 2"></button>
+      <button class="pip" data-i="2" aria-label="Quote 3"></button>
+      <span class="count" id="kindCount">01 / 03</span>
+    </div>
+  </div>
+</section>
+
+<!-- ─── CONTACT ───────────────────────────────────────────────── -->
+<section class="contact-section" id="contact" data-screen-label="05 Contact">
+  <div class="wrap">
+    <div class="section-head">
+      <div class="label"><span class="ln"></span><span>Contact</span></div>
+      <h2>Let's talk about <em>your book.</em></h2>
+    </div>
+
+    <div class="contact">
+      <div>
+        <p class="blurb">
+          I'd love to hear about your project. Send a note with a sentence or two
+          about the book and where you are in the process &mdash;
+          <em>proposal, draft, or somewhere in between.</em>
+          I read everything that comes in.
+        </p>
+      </div>
+      <div class="links">
+        <a href="/cdn-cgi/l/email-protection#523a373e3e3d122037303731313330203b353a267c313d3f">
+          <span><span class="lbl">Email&nbsp;·&nbsp;</span><span class="__cf_email__" data-cfemail="18707d747477586a7d7a7d7b7b797a6a717f706c367b7775">[email&#160;protected]</span></span>
+          <span class="arrow">→</span>
+        </a>
+        <a href="https://www.linkedin.com/" target="_blank" rel="noopener">
+          <span><span class="lbl">LinkedIn&nbsp;·&nbsp;</span>rebecca-bright</span>
+          <span class="arrow">→</span>
+        </a>
+      </div>
+    </div>
+  </div>
+</section>
+
+</main>
+
+<footer class="bottom wrap">
+  <div>© 2026 Rebecca Bright Editorial</div>
+  <div class="center"><em>Set in Source Serif &amp; JetBrains Mono</em></div>
+  <div class="right">Last updated · Spring 2026</div>
+</footer>
+
+<div id="tweaks-mount"></div>
+
+<!-- ─── Quote rotator ─────────────────────────────────────── -->
+<script data-cfasync="false" src="/cdn-cgi/scripts/5c5dd728/cloudflare-static/email-decode.min.js"></script><script>
+  (function(){
+    var quotes = document.querySelectorAll('#kindQuotes .q');
+    var pips = document.querySelectorAll('.kind-controls .pip');
+    var count = document.getElementById('kindCount');
+    var i = 0, total = quotes.length, timer = null;
+    function pad(n){ return ('0' + (n + 1)).slice(-2); }
+    function go(n){
+      i = (n + total) % total;
+      quotes.forEach(function(q, k){ q.classList.toggle('is-active', k === i); });
+      pips.forEach(function(p, k){ p.classList.toggle('is-active', k === i); });
+      if (count) count.textContent = pad(i) + ' / ' + pad(total - 1) .replace(/^0/,'0');
+      // simpler:
+      if (count) count.textContent = pad(i) + ' / ' + pad(total - 1);
+    }
+    function setCount(){ if(count) count.textContent = pad(i) + ' / ' + ('0'+total).slice(-2); }
+    function start(){ stop(); timer = setInterval(function(){ go(i + 1); setCount(); }, 7000); }
+    function stop(){ if (timer) { clearInterval(timer); timer = null; } }
+    pips.forEach(function(p, k){ p.addEventListener('click', function(){ go(k); setCount(); start(); }); });
+    setCount();
+    start();
+  })();
+</script>
+
+<!-- ─── React + Babel for Tweaks panel ─────────────────────── -->
+<script src="https://unpkg.com/react@18.3.1/umd/react.development.js" integrity="sha384-hD6/rw4ppMLGNu3tX5cjIb+uRZ7UkRJ6BPkLpg4hAu/6onKUg4lLsHAs9EBPT82L" crossorigin="anonymous"></script>
+<script src="https://unpkg.com/react-dom@18.3.1/umd/react-dom.development.js" integrity="sha384-u6aeetuaXnQ38mYT8rp6sbXaQe3NL9t+IBXmnYxwkUI2Hw4bsp2Wvmx4yRQF1uAm" crossorigin="anonymous"></script>
+<script src="https://unpkg.com/@babel/standalone@7.29.0/babel.min.js" integrity="sha384-m08KidiNqLdpJqLq95G/LEi8Qvjl/xUYll3QILypMoQ65QorJ9Lvtp2RXYGBFj1y" crossorigin="anonymous"></script>
+<script type="text/babel" src="tweaks-panel.jsx"></script>
+
+<script type="text/babel">
+  const TWEAK_DEFAULTS = /*EDITMODE-BEGIN*/{
+    "palette": "mist",
+    "display": "newsreader",
+    "grain": "on"
+  }/*EDITMODE-END*/;
+
+  function TweaksApp(){
+    const [t, setTweak] = useTweaks(TWEAK_DEFAULTS);
+
+    React.useEffect(() => {
+      document.body.dataset.palette = t.palette;
+      document.body.dataset.display = t.display;
+      document.body.dataset.grain   = t.grain;
+    }, [t.palette, t.display, t.grain]);
+
+    const paletteSwatches = {
+      ocean:  ["#f3efe6", "#1f2a30", "#2371a8"],
+      mist:   ["#eef2ec", "#1f2a30", "#387fb0"],
+      cobalt: ["#f1ede2", "#1a242c", "#2371a8"],
+    };
+
+    return (
+      <TweaksPanel title="Tweaks">
+        <TweakSection label="Atmosphere" />
+        <TweakColor
+          label="Palette"
+          value={paletteSwatches[t.palette]}
+          options={Object.values(paletteSwatches)}
+          onChange={(arr) => {
+            const key = Object.keys(paletteSwatches).find(
+              k => paletteSwatches[k].join() === arr.join()
+            ) || "ocean";
+            setTweak('palette', key);
+          }}
+        />
+        <TweakRadio
+          label="Paper grain"
+          value={t.grain}
+          options={['off','on','strong']}
+          onChange={(v) => setTweak('grain', v)}
+        />
+        <TweakSection label="Typography" />
+        <TweakSelect
+          label="Display face"
+          value={t.display}
+          options={[
+            {value:"source-serif", label:"Source Serif (default)"},
+            {value:"newsreader",   label:"Newsreader"},
+          ]}
+          onChange={(v) => setTweak('display', v)}
+        />
+      </TweaksPanel>
+    );
+  }
+
+  ReactDOM.createRoot(document.getElementById('tweaks-mount'))
+    .render(<TweaksApp />);
+</script>
+
+</body>
+</html>
