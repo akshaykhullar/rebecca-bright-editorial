@@ -58,7 +58,7 @@
 
   *{box-sizing:border-box}
   html,body{margin:0;padding:0}
-  html{ background:var(--bg); overflow-x:hidden; }
+  html{ background:var(--bg); }
   body{
     background:var(--bg);
     color:var(--ink);
@@ -70,6 +70,7 @@
     text-rendering:optimizeLegibility;
     transition:background-color .35s ease, color .35s ease;
     position:relative;
+    overflow-x:hidden;
   }
   ::selection{background:var(--accent-3);color:var(--ink)}
 
@@ -654,7 +655,7 @@
     padding:96px 64px 80px;
     position:relative;
   }
-  @media (max-width:800px){ .shelf-inner{ padding:64px 24px 56px; } }
+  @media (max-width:720px){ .shelf-inner{ padding:64px 24px 56px; } }
   .shelf-inner::before{
     content:""; position:absolute; inset:0;
     background-image: radial-gradient(ellipse 80% 50% at 50% 0%, rgba(194,229,211,.06), transparent 70%);
@@ -681,7 +682,7 @@
     margin:0; color:#e6edf2; text-wrap:balance;
   }
   .shelf-title h2 em{ font-style:italic; font-weight:300; color:var(--accent-3); }
-  @media (max-width:800px){ .shelf-title{ margin-bottom:48px; } }
+  @media (max-width:720px){ .shelf-title{ margin-bottom:48px; } }
 
   .books{
     display:grid;
@@ -985,129 +986,6 @@
     text-transform:uppercase; color:rgba(230,237,242,.85);
   }
 
-  /* ─── Scroll fade-in ─────────────────────────────────────── */
-  .shelf-fade{
-    opacity:0; transform:translateY(20px);
-    transition:opacity .9s cubic-bezier(.2,.7,.2,1), transform .9s cubic-bezier(.2,.7,.2,1);
-  }
-  .shelf-fade.is-visible{ opacity:1; transform:none; }
-  .shelf-fade.shelf-fade--delay{ transition-delay:.18s; }
-
-  /* ─── Swipe hint (mobile only) ───────────────────────────── */
-  .shelf-swipe-hint{
-    display:none;
-    align-items:center; justify-content:center; gap:14px;
-    margin-top:28px;
-    font-family:var(--mono); font-size:9px; letter-spacing:.26em;
-    text-transform:uppercase; color:rgba(194,229,211,.3);
-    pointer-events:none;
-  }
-  .shelf-swipe-hint::before,.shelf-swipe-hint::after{
-    content:""; flex:1; height:1px;
-    background:rgba(194,229,211,.1); max-width:48px;
-  }
-
-  /* ─── Mobile: editorial carousel ─────────────────────────── */
-  @media (max-width:800px){
-
-    /* Fractionally softer navy — typography leads */
-    .shelf{ background:color-mix(in oklab, var(--bg-deep) 88%, #3d6278); }
-
-    /* Heading: tighter, more expressive */
-    .shelf-title{ margin-bottom:40px; }
-    .shelf-title .shelf-label{ margin-bottom:18px; font-size:10px; }
-    .shelf-title h2{
-      font-size:clamp(34px, 9.5vw, 50px);
-      line-height:.97; letter-spacing:-.026em;
-    }
-
-    /* Horizontal swipeable carousel */
-    .books{
-      display:flex;
-      overflow-x:scroll;
-      scroll-snap-type:x mandatory;
-      scroll-padding-left:24px;
-      -webkit-overflow-scrolling:touch;
-      scrollbar-width:none;
-      gap:0;
-      margin:0 -24px;
-      padding:12px 24px 36px;
-      align-items:flex-start;
-    }
-    .books::-webkit-scrollbar{ display:none; }
-
-    /* Individual book cards */
-    .book.b1,.book.b2,.book.b3,.book.b4,
-    .book.b5,.book.b6,.book.b7,.book.b8{
-      grid-column:unset;
-      transform:none;
-      --tilt:0deg;
-      flex:0 0 58vw;
-      min-width:0;
-      max-width:240px;
-      scroll-snap-align:start;
-      padding-right:20px;
-    }
-    /* trailing spacer so last card can snap */
-    .books .book:last-child{ padding-right:0; margin-right:38vw; }
-
-    /* Cover frame — softer shadow, reduced visual weight */
-    .book .frame{
-      box-shadow:
-        inset 4px 0 10px -5px rgba(0,0,0,.14),
-        0 8px 20px -8px rgba(0,0,0,.4),
-        0 20px 36px -18px rgba(0,0,0,.45);
-    }
-    .book:hover .frame{
-      transform:rotate(0deg) translateY(-5px);
-      box-shadow:
-        inset 4px 0 10px -5px rgba(0,0,0,.14),
-        0 14px 28px -10px rgba(0,0,0,.55),
-        0 30px 48px -20px rgba(0,0,0,.45);
-    }
-
-    /* Active (drawer open) — lift + mint outline */
-    .book.is-active .frame{
-      transform:rotate(0deg) translateY(-7px) !important;
-      outline-color:rgba(194,229,211,.7);
-      box-shadow:
-        inset 4px 0 10px -5px rgba(0,0,0,.14),
-        0 16px 32px -12px rgba(0,0,0,.6),
-        0 36px 54px -22px rgba(0,0,0,.5);
-    }
-
-    /* Touch feedback */
-    .book:active .frame{
-      transform:rotate(0deg) translateY(-2px) scale(.985) !important;
-      transition:transform .15s ease;
-    }
-
-    /* Caption */
-    .book figcaption{ padding-top:2px; }
-    .book figcaption .t{ font-size:13px; line-height:1.2; }
-    .book figcaption .y{ font-size:9px; margin-top:4px; }
-    .book figcaption .tap-hint{ font-size:8.5px; margin-top:5px; letter-spacing:.2em; }
-
-    /* Show swipe hint */
-    .shelf-swipe-hint{ display:flex; }
-
-    /* Drawer on mobile — calmer treatment */
-    .book-drawer{ margin-top:36px; }
-    .book-drawer .drawer-pad{
-      padding:36px 0 32px;
-      border-top-color:rgba(255,255,255,.07);
-    }
-    .drawer-close{ top:36px; }
-    .drawer-left .d-title{ font-size:clamp(22px, 5.5vw, 30px); }
-    .drawer-left .d-synopsis{ font-size:15.5px; line-height:1.62; }
-    .drawer-left .d-becca{ font-size:14.5px; }
-    .drawer-right .d-role-card{ padding:18px 22px; }
-    .drawer-right .d-role-card .rc-role{ font-size:17px; }
-
-    /* Soften shelf borders */
-    .shelf-foot{ margin-top:40px; padding-top:20px; }
-  }
-
   /* ─── Kind Words (rotating quotes) ──────────────────────── */
   .kind{ padding-block:140px; background:var(--bg); }
   @media (max-width:720px){ .kind{ padding-block:72px; } }
@@ -1278,8 +1156,6 @@
 
     <!-- Type column -->
     <div class="hero-type">
-      <div class="hero-eyebrow">Rebecca Bright Editorial &middot; Est. 2024</div>
-
       <h1 class="hero-h">
         Freelance editor of nonfiction <span class="it">with impact.</span>
       </h1>
@@ -1324,8 +1200,7 @@
         </svg>
       </div>
       <div class="portrait-oval">
-        <span class="placeholder-tag">Portrait &middot; drop image</span>
-      </div>
+        </div>
     </aside>
 
   </div>
@@ -1337,7 +1212,7 @@
     <div class="about-grid">
 
       <div class="about-still" aria-label="Still life — desk with books and pens">
-        <span class="tag">Still life &middot; image TK</span>
+        <img src="sample-image-placeholder.jpg" alt="Desk with books" style="width:100%;height:100%;object-fit:cover;display:block;" />
       </div>
 
       <div class="about-copy">
@@ -1527,7 +1402,7 @@
   <div class="shelf">
     <div class="shelf-inner">
 
-      <div class="shelf-title shelf-fade">
+      <div class="shelf-title">
         <div class="shelf-label"><span class="ln"></span><span>Selected Projects</span></div>
         <h2>Books I've <em>helped shape.</em></h2>
       </div>
@@ -1760,8 +1635,6 @@
 
       </div>
 
-      <div class="shelf-swipe-hint" aria-hidden="true">Swipe to browse</div>
-
       <!-- ─── Editorial drawer ─── -->
       <div class="book-drawer" id="bookDrawer">
         <div class="drawer-inner">
@@ -1775,7 +1648,6 @@
 
       <div class="shelf-foot">
         <em>Full project list available on request.</em>
-        <span class="more">→ Available on request</span>
       </div>
 
     </div>
@@ -1942,22 +1814,6 @@
         btn.setAttribute('aria-expanded', String(!open));
       });
     });
-  })();
-</script>
-
-<!-- ─── Scroll fade-in ───────────────────────────────────────── -->
-<script>
-  (function(){
-    if(!('IntersectionObserver' in window)) {
-      document.querySelectorAll('.shelf-fade').forEach(function(el){ el.classList.add('is-visible'); });
-      return;
-    }
-    var io = new IntersectionObserver(function(entries){
-      entries.forEach(function(e){
-        if(e.isIntersecting){ e.target.classList.add('is-visible'); io.unobserve(e.target); }
-      });
-    }, { threshold:0.08, rootMargin:'0px 0px -32px 0px' });
-    document.querySelectorAll('.shelf-fade').forEach(function(el){ io.observe(el); });
   })();
 </script>
 
