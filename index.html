@@ -58,7 +58,7 @@
 
   *{box-sizing:border-box}
   html,body{margin:0;padding:0}
-  html{ background:var(--bg); }
+  html{ background:var(--bg); overflow-x:hidden; }
   body{
     background:var(--bg);
     color:var(--ink);
@@ -70,7 +70,6 @@
     text-rendering:optimizeLegibility;
     transition:background-color .35s ease, color .35s ease;
     position:relative;
-    overflow-x:hidden;
   }
   ::selection{background:var(--accent-3);color:var(--ink)}
 
@@ -93,13 +92,13 @@
 
   /* ─── Top bar ────────────────────────────────────────────── */
   header.top{
-    position:sticky;top:0;z-index:5;
+    position:sticky;top:0;z-index:100;
     background:color-mix(in oklab, var(--bg) 90%, transparent);
     backdrop-filter:blur(10px);
     border-bottom:1px solid var(--rule);
   }
   header.top .row{
-    display:flex;align-items:baseline;justify-content:space-between;
+    display:flex;align-items:center;justify-content:space-between;
     padding-block:20px 18px; gap:24px;
   }
   .mark{
@@ -111,7 +110,7 @@
     display:flex; gap:28px;
     font-family:var(--display); font-style:italic; font-weight:400;
     font-size:15.5px; color:var(--ink-2);
-    flex-wrap:nowrap; white-space:nowrap;
+    flex-wrap:wrap; white-space:nowrap;
   }
   nav.top-nav a{ position:relative; }
   nav.top-nav a:hover{ color:var(--accent-2); }
@@ -121,7 +120,145 @@
     transition:transform .3s ease;
   }
   nav.top-nav a:hover::after{ transform:scaleX(1); transform-origin:left; }
-  @media (max-width:720px){ nav.top-nav{ gap:18px; font-size:13.5px; } }
+
+  /* ─── Hamburger button (mobile only) ─────────────────────── */
+  .nav-toggle{
+    display:none;
+    flex-direction:column; justify-content:center; align-items:center;
+    gap:5px; width:40px; height:40px;
+    background:transparent; border:0; cursor:pointer; padding:0;
+    z-index:200; position:relative;
+  }
+  .nav-toggle .bar{
+    display:block; width:22px; height:1.5px;
+    background:var(--ink); border-radius:2px;
+    transition:transform .35s cubic-bezier(.2,.7,.2,1), opacity .25s ease, width .3s ease;
+    transform-origin:center;
+  }
+  .nav-toggle.is-open .bar:nth-child(1){ transform:translateY(6.5px) rotate(45deg); }
+  .nav-toggle.is-open .bar:nth-child(2){ opacity:0; width:0; }
+  .nav-toggle.is-open .bar:nth-child(3){ transform:translateY(-6.5px) rotate(-45deg); }
+
+  /* ─── Fullscreen mobile nav overlay ──────────────────────── */
+  .mobile-nav{
+    position:fixed; inset:0; z-index:150;
+    background:var(--bg-deep);
+    display:flex; flex-direction:column;
+    padding:0 40px 56px;
+    opacity:0; pointer-events:none;
+    transition:opacity .45s cubic-bezier(.2,.7,.2,1);
+    overflow:hidden;
+  }
+  .mobile-nav.is-open{
+    opacity:1; pointer-events:auto;
+  }
+  .mobile-nav::before{
+    content:""; position:absolute; inset:0; pointer-events:none;
+    background-image: radial-gradient(ellipse 70% 55% at 80% 110%, rgba(194,229,211,.07), transparent 65%),
+                      radial-gradient(ellipse 50% 40% at 10% -5%, rgba(94,143,155,.09), transparent 60%);
+  }
+
+  /* top bar inside overlay — mirrors main header */
+  .mobile-nav-bar{
+    display:flex; align-items:center; justify-content:space-between;
+    padding-block:20px 18px;
+    border-bottom:1px solid rgba(255,255,255,.08);
+    flex-shrink:0;
+  }
+  .mobile-nav-bar .mark{ color:#e6edf2; }
+  .mobile-nav-bar .mark .small{ color:rgba(230,237,242,.55); }
+
+  /* close button inside overlay */
+  .mobile-nav-close{
+    display:flex; flex-direction:column; justify-content:center; align-items:center;
+    gap:5px; width:40px; height:40px;
+    background:transparent; border:0; cursor:pointer; padding:0;
+  }
+  .mobile-nav-close .bar{
+    display:block; width:22px; height:1.5px;
+    background:#e6edf2; border-radius:2px; transform-origin:center;
+  }
+  .mobile-nav-close .bar:nth-child(1){ transform:translateY(3.25px) rotate(45deg); }
+  .mobile-nav-close .bar:nth-child(2){ transform:translateY(-3.25px) rotate(-45deg); }
+
+  /* nav links inside overlay */
+  .mobile-nav-links{
+    display:flex; flex-direction:column;
+    flex:1; justify-content:center;
+    gap:0; list-style:none; margin:0; padding:0;
+  }
+  .mobile-nav-links li{
+    overflow:visible;
+    border-bottom:1px solid rgba(255,255,255,.06);
+    opacity:0; transform:translateY(20px);
+    transition:opacity .5s ease, transform .5s ease;
+  }
+  .mobile-nav.is-open .mobile-nav-links li{
+    opacity:1; transform:translateY(0);
+  }
+  /* staggered entrance */
+  .mobile-nav.is-open .mobile-nav-links li:nth-child(1){ transition-delay:.08s; }
+  .mobile-nav.is-open .mobile-nav-links li:nth-child(2){ transition-delay:.14s; }
+  .mobile-nav.is-open .mobile-nav-links li:nth-child(3){ transition-delay:.20s; }
+  .mobile-nav.is-open .mobile-nav-links li:nth-child(4){ transition-delay:.26s; }
+  .mobile-nav.is-open .mobile-nav-links li:nth-child(5){ transition-delay:.32s; }
+
+  .mobile-nav-links a{
+    display:block; padding:22px 0;
+    font-family:var(--display); font-style:italic; font-weight:300;
+    font-size:clamp(32px, 8vw, 52px); line-height:1.1;
+    letter-spacing:-.02em; color:rgba(230,237,242,.7);
+    transition:color .2s ease, padding-left .25s ease;
+  }
+  .mobile-nav-links a:hover{ color:#e6edf2; padding-left:8px; }
+
+  /* Contact — highlighted link */
+  .mobile-nav-links .nav-contact a{
+    color:var(--accent-3);
+    display:flex; align-items:center; gap:16px;
+  }
+  .mobile-nav-links .nav-contact a::after{
+    content:"→";
+    font-style:normal; font-size:.55em; letter-spacing:0;
+    opacity:0; transform:translateX(-8px);
+    transition:opacity .25s ease, transform .25s ease;
+    display:inline-block;
+  }
+  .mobile-nav-links .nav-contact a:hover::after{
+    opacity:1; transform:translateX(0);
+  }
+  /* subtle pulse ring on Contact */
+  @keyframes contact-pulse{
+    0%  { box-shadow:0 0 0 0 rgba(194,229,211,.5); }
+    70% { box-shadow:0 0 0 10px rgba(194,229,211,0); }
+    100%{ box-shadow:0 0 0 0 rgba(194,229,211,0); }
+  }
+  .mobile-nav-links .nav-contact{
+    position:relative;
+  }
+  .mobile-nav-links .nav-contact .contact-dot{
+    display:inline-block; width:7px; height:7px;
+    border-radius:50%; background:var(--accent-3);
+    flex-shrink:0; margin-bottom:2px;
+    animation:contact-pulse 2.4s ease infinite;
+  }
+  .mobile-nav.is-open .mobile-nav-links .nav-contact .contact-dot{
+    animation-delay:.6s;
+  }
+
+  /* footer inside overlay */
+  .mobile-nav-foot{
+    flex-shrink:0;
+    font-family:var(--mono); font-size:10.5px; letter-spacing:.18em;
+    text-transform:uppercase; color:rgba(230,237,242,.3);
+    opacity:0; transition:opacity .5s ease .4s;
+  }
+  .mobile-nav.is-open .mobile-nav-foot{ opacity:1; }
+
+  @media (max-width:720px){
+    .nav-toggle{ display:flex; }
+    nav.top-nav{ display:none; }
+  }
 
   /* ─── Section scaffolding ────────────────────────────────── */
   section{ padding-block:120px; position:relative; }
@@ -223,7 +360,7 @@
     aspect-ratio: 1 / 1;
   }
   @media (max-width:880px){
-    .hero-portrait{ justify-self:start; max-width:340px; }
+    .hero-portrait{ justify-self:center; max-width:340px; width:100%; }
   }
 
   /* Sunburst rays — sit behind the oval, in mint/blue */
@@ -498,53 +635,53 @@
     .svc-body .copy{ grid-column:2 / -1; }
     .svc-body .aside{ grid-column:2 / -1; padding-left:0; border-left:0; padding-top:18px; margin-top:14px; border-top:1px solid var(--rule); }
   }
+  @media (max-width:480px){
+    .svc-row{ grid-template-columns:32px 1fr auto; column-gap:12px; padding:22px 0; }
+    .svc-body .pad{ grid-template-columns:32px 1fr; column-gap:12px; }
+    .svc-row:hover, li.is-open .svc-row{ padding-left:6px; }
+  }
 
   /* ─── Selected Projects (book shelf) ───────────────────── */
-  .work-section{ padding-bottom:0; padding-top:120px; }
-  @media (max-width:720px){ .work-section{ padding-top:72px; } }
-
-  .work-head{
-    display:grid; grid-template-columns:1.3fr 1fr; gap:48px;
-    align-items:end; margin-bottom:64px;
-  }
-  @media (max-width:900px){ .work-head{ grid-template-columns:1fr; gap:24px; } }
-  .work-head .blurb{
-    font-family:var(--display); font-size:17px; line-height:1.6;
-    color:var(--ink-2); max-width:420px;
-  }
+  .work-section{ padding-bottom:0; padding-top:0; }
 
   .shelf{
-    margin-top:24px;
     background:var(--bg-deep);
     color:#e6edf2;
     position:relative;
   }
-  .shelf::before{
-    content:""; position:absolute; left:0; right:0; top:0; height:1px;
-    background:rgba(255,255,255,.08);
-  }
   .shelf-inner{
     max-width:1280px; margin:0 auto;
-    padding:104px 64px 96px;
+    padding:96px 64px 80px;
     position:relative;
   }
-  @media (max-width:720px){ .shelf-inner{ padding:72px 24px 64px; } }
+  @media (max-width:800px){ .shelf-inner{ padding:64px 24px 56px; } }
   .shelf-inner::before{
     content:""; position:absolute; inset:0;
     background-image: radial-gradient(ellipse 80% 50% at 50% 0%, rgba(194,229,211,.06), transparent 70%);
     pointer-events:none;
   }
 
-  .shelf-marquee{
-    font-family:var(--display); font-style:italic; font-size:15.5px;
-    color:rgba(230,237,242,.7);
-    display:flex; align-items:center; gap:14px; margin-bottom:48px;
+  /* section heading — inside the dark shelf */
+  .shelf-title{
+    margin-bottom:72px;
   }
-  .shelf-marquee .ln{ flex:1; height:1px; background:rgba(230,237,242,.18); max-width:200px; }
-  .shelf-marquee .num{
-    font-family:var(--mono); font-size:11px; letter-spacing:.18em; text-transform:uppercase;
-    color:rgba(230,237,242,.55);
+  .shelf-title .shelf-label{
+    font-family:var(--mono); font-size:11px; letter-spacing:.24em;
+    text-transform:uppercase; color:var(--accent-3);
+    display:flex; align-items:center; gap:18px; margin-bottom:24px;
+    opacity:.85;
   }
+  .shelf-title .shelf-label .ln{
+    width:48px; height:1px; background:rgba(194,229,211,.3);
+  }
+  .shelf-title h2{
+    font-family:var(--display); font-weight:400;
+    font-size:clamp(42px, 6vw, 96px);
+    line-height:.96; letter-spacing:-.028em;
+    margin:0; color:#e6edf2; text-wrap:balance;
+  }
+  .shelf-title h2 em{ font-style:italic; font-weight:300; color:var(--accent-3); }
+  @media (max-width:800px){ .shelf-title{ margin-bottom:48px; } }
 
   .books{
     display:grid;
@@ -664,19 +801,316 @@
     .book.b1,.book.b2,.book.b3,.book.b4,.book.b5,.book.b6,.book.b7,.book.b8{ grid-column: span 12; }
   }
 
+  /* clickable book state */
+  .book{ cursor:pointer; }
+  .book .frame{
+    transition: transform .55s cubic-bezier(.2,.7,.2,1), box-shadow .4s ease, outline .2s ease;
+    outline: 2px solid transparent;
+    outline-offset: 4px;
+  }
+  .book.is-active .frame{
+    outline-color: var(--accent-3);
+    transform: rotate(0deg) translateY(-8px) !important;
+    box-shadow:
+      inset 6px 0 12px -6px rgba(0,0,0,.18),
+      0 1px 0 rgba(0,0,0,.06),
+      0 24px 44px -16px rgba(0,0,0,.7),
+      0 50px 70px -30px rgba(0,0,0,.6);
+  }
+  .book figcaption .tap-hint{
+    font-family:var(--mono); font-size:9.5px; letter-spacing:.18em;
+    text-transform:uppercase; color:rgba(194,229,211,.4);
+    margin-top:8px; transition:color .25s ease;
+  }
+  .book:hover figcaption .tap-hint{ color:rgba(194,229,211,.75); }
+  .book.is-active figcaption .tap-hint{ color:var(--accent-3); }
+
+  /* ─── Book editorial drawer ──────────────────────────── */
+  .book-drawer{
+    display:grid; grid-template-rows:0fr;
+    transition:grid-template-rows .7s cubic-bezier(.2,.7,.2,1);
+    margin-top:56px;
+  }
+  .book-drawer.is-open{ grid-template-rows:1fr; }
+  .book-drawer > .drawer-inner{ min-height:0; overflow:hidden; }
+
+  .book-drawer .drawer-pad{
+    border-top:1px solid rgba(255,255,255,.1);
+    padding:56px 0 48px;
+    display:grid;
+    grid-template-columns:1.2fr 1fr;
+    gap:64px;
+    opacity:0; transform:translateY(-10px);
+    transition:opacity .45s ease .1s, transform .45s ease .1s;
+    position:relative;
+  }
+  .book-drawer.is-open .drawer-pad{ opacity:1; transform:none; }
+
+  /* accent bar — takes color from JS via --drawer-accent CSS var */
+  .book-drawer .drawer-pad::before{
+    content:""; position:absolute; left:0; top:56px; bottom:48px;
+    width:2px;
+    background:var(--drawer-accent, var(--accent-3));
+    opacity:.7;
+    border-radius:1px;
+  }
+
+  .drawer-left{ padding-left:24px; }
+  .drawer-left .d-eyebrow{
+    font-family:var(--mono); font-size:10.5px; letter-spacing:.22em;
+    text-transform:uppercase; color:rgba(194,229,211,.6);
+    margin-bottom:16px;
+  }
+  .drawer-left .d-title{
+    font-family:var(--display); font-weight:400;
+    font-size:clamp(28px, 3.2vw, 44px);
+    line-height:1.02; letter-spacing:-.02em;
+    color:#e6edf2; margin:0 0 6px; text-wrap:balance;
+  }
+  .drawer-left .d-title em{ font-style:italic; font-weight:300; }
+  .drawer-left .d-author{
+    font-family:var(--display); font-style:italic; font-size:18px;
+    color:rgba(230,237,242,.55); margin-bottom:28px;
+  }
+  .drawer-left .d-meta{
+    display:flex; gap:24px; flex-wrap:wrap;
+    margin-bottom:32px; padding-bottom:28px;
+    border-bottom:1px solid rgba(255,255,255,.07);
+  }
+  .drawer-left .d-meta .m{
+    display:flex; flex-direction:column; gap:4px;
+  }
+  .drawer-left .d-meta .m-lbl{
+    font-family:var(--mono); font-size:9.5px; letter-spacing:.2em;
+    text-transform:uppercase; color:rgba(230,237,242,.35);
+  }
+  .drawer-left .d-meta .m-val{
+    font-family:var(--display); font-size:14.5px; color:rgba(230,237,242,.8);
+  }
+  .drawer-left .d-synopsis{
+    font-family:var(--display); font-size:17.5px; line-height:1.65;
+    color:rgba(230,237,242,.75); max-width:52ch; text-wrap:pretty;
+    margin:0 0 28px;
+  }
+  .drawer-left .d-becca{
+    font-family:var(--display); font-style:italic; font-size:16px;
+    line-height:1.6; color:rgba(194,229,211,.8);
+    padding-left:16px; border-left:1px solid rgba(194,229,211,.25);
+    margin:0;
+  }
+  .drawer-left .d-becca::before{
+    content:"— Rebecca: ";
+    font-style:normal; font-family:var(--mono); font-size:10px;
+    letter-spacing:.18em; text-transform:uppercase;
+    color:rgba(194,229,211,.45); display:block; margin-bottom:8px;
+  }
+
+  .drawer-right{
+    padding-top:4px;
+    display:flex; flex-direction:column; gap:32px;
+  }
+  .drawer-right .d-role-card{
+    background:rgba(255,255,255,.04);
+    border:1px solid rgba(255,255,255,.08);
+    padding:24px 28px;
+  }
+  .drawer-right .d-role-card .rc-lbl{
+    font-family:var(--mono); font-size:10px; letter-spacing:.22em;
+    text-transform:uppercase; color:rgba(230,237,242,.4);
+    margin-bottom:12px;
+  }
+  .drawer-right .d-role-card .rc-role{
+    font-family:var(--display); font-size:20px; font-weight:400;
+    color:#e6edf2; line-height:1.2; letter-spacing:-.01em;
+    margin-bottom:10px;
+  }
+  .drawer-right .d-role-card .rc-desc{
+    font-family:var(--display); font-size:15.5px; line-height:1.55;
+    color:rgba(230,237,242,.55); font-style:italic;
+  }
+  .drawer-right .d-quote{
+    padding:0;
+  }
+  .drawer-right .d-quote blockquote{
+    margin:0; font-family:var(--display); font-style:italic;
+    font-size:17px; line-height:1.6; color:rgba(230,237,242,.65);
+    border-left:1px solid rgba(255,255,255,.12);
+    padding-left:20px;
+  }
+  .drawer-right .d-quote cite{
+    display:block; margin-top:14px;
+    font-family:var(--mono); font-size:10px; letter-spacing:.18em;
+    text-transform:uppercase; color:rgba(230,237,242,.35); font-style:normal;
+    padding-left:20px;
+  }
+
+  /* drawer close button */
+  .drawer-close{
+    position:absolute; top:56px; right:0;
+    width:32px; height:32px;
+    background:rgba(255,255,255,.06); border:1px solid rgba(255,255,255,.1);
+    border-radius:50%; cursor:pointer;
+    display:flex; align-items:center; justify-content:center;
+    color:rgba(230,237,242,.5);
+    transition:background .2s ease, color .2s ease;
+  }
+  .drawer-close:hover{ background:rgba(255,255,255,.1); color:#e6edf2; }
+  .drawer-close::before, .drawer-close::after{
+    content:""; position:absolute; width:10px; height:1px;
+    background:currentColor; border-radius:1px;
+  }
+  .drawer-close::before{ transform:rotate(45deg); }
+  .drawer-close::after{ transform:rotate(-45deg); }
+
+  @media (max-width:860px){
+    .book-drawer .drawer-pad{ grid-template-columns:1fr; gap:36px; }
+    .book-drawer .drawer-pad::before{ display:none; }
+    .drawer-left{ padding-left:0; }
+  }
+  @media (max-width:560px){
+    .book-drawer .drawer-pad{ padding:40px 0 36px; }
+    .drawer-close{ top:40px; }
+    .drawer-left .d-meta{ gap:16px; }
+  }
+
   .shelf-foot{
     margin-top:64px; padding-top:24px; border-top:1px solid rgba(255,255,255,.08);
     display:flex; justify-content:space-between; gap:24px; align-items:baseline;
     font-family:var(--display); font-style:italic; font-size:14.5px;
     color:rgba(230,237,242,.6);
   }
+  @media (max-width:560px){ .shelf-foot{ flex-direction:column; gap:12px; } }
   .shelf-foot .more{
     font-family:var(--mono); font-style:normal; font-size:11px; letter-spacing:.16em;
     text-transform:uppercase; color:rgba(230,237,242,.85);
   }
 
+  /* ─── Scroll fade-in ─────────────────────────────────────── */
+  .shelf-fade{
+    opacity:0; transform:translateY(20px);
+    transition:opacity .9s cubic-bezier(.2,.7,.2,1), transform .9s cubic-bezier(.2,.7,.2,1);
+  }
+  .shelf-fade.is-visible{ opacity:1; transform:none; }
+  .shelf-fade.shelf-fade--delay{ transition-delay:.18s; }
+
+  /* ─── Swipe hint (mobile only) ───────────────────────────── */
+  .shelf-swipe-hint{
+    display:none;
+    align-items:center; justify-content:center; gap:14px;
+    margin-top:28px;
+    font-family:var(--mono); font-size:9px; letter-spacing:.26em;
+    text-transform:uppercase; color:rgba(194,229,211,.3);
+    pointer-events:none;
+  }
+  .shelf-swipe-hint::before,.shelf-swipe-hint::after{
+    content:""; flex:1; height:1px;
+    background:rgba(194,229,211,.1); max-width:48px;
+  }
+
+  /* ─── Mobile: editorial carousel ─────────────────────────── */
+  @media (max-width:800px){
+
+    /* Fractionally softer navy — typography leads */
+    .shelf{ background:color-mix(in oklab, var(--bg-deep) 88%, #3d6278); }
+
+    /* Heading: tighter, more expressive */
+    .shelf-title{ margin-bottom:40px; }
+    .shelf-title .shelf-label{ margin-bottom:18px; font-size:10px; }
+    .shelf-title h2{
+      font-size:clamp(34px, 9.5vw, 50px);
+      line-height:.97; letter-spacing:-.026em;
+    }
+
+    /* Horizontal swipeable carousel */
+    .books{
+      display:flex;
+      overflow-x:scroll;
+      scroll-snap-type:x mandatory;
+      scroll-padding-left:24px;
+      -webkit-overflow-scrolling:touch;
+      scrollbar-width:none;
+      gap:0;
+      margin:0 -24px;
+      padding:12px 24px 36px;
+      align-items:flex-start;
+    }
+    .books::-webkit-scrollbar{ display:none; }
+
+    /* Individual book cards */
+    .book.b1,.book.b2,.book.b3,.book.b4,
+    .book.b5,.book.b6,.book.b7,.book.b8{
+      grid-column:unset;
+      transform:none;
+      --tilt:0deg;
+      flex:0 0 58vw;
+      min-width:0;
+      max-width:240px;
+      scroll-snap-align:start;
+      padding-right:20px;
+    }
+    /* trailing spacer so last card can snap */
+    .books .book:last-child{ padding-right:0; margin-right:38vw; }
+
+    /* Cover frame — softer shadow, reduced visual weight */
+    .book .frame{
+      box-shadow:
+        inset 4px 0 10px -5px rgba(0,0,0,.14),
+        0 8px 20px -8px rgba(0,0,0,.4),
+        0 20px 36px -18px rgba(0,0,0,.45);
+    }
+    .book:hover .frame{
+      transform:rotate(0deg) translateY(-5px);
+      box-shadow:
+        inset 4px 0 10px -5px rgba(0,0,0,.14),
+        0 14px 28px -10px rgba(0,0,0,.55),
+        0 30px 48px -20px rgba(0,0,0,.45);
+    }
+
+    /* Active (drawer open) — lift + mint outline */
+    .book.is-active .frame{
+      transform:rotate(0deg) translateY(-7px) !important;
+      outline-color:rgba(194,229,211,.7);
+      box-shadow:
+        inset 4px 0 10px -5px rgba(0,0,0,.14),
+        0 16px 32px -12px rgba(0,0,0,.6),
+        0 36px 54px -22px rgba(0,0,0,.5);
+    }
+
+    /* Touch feedback */
+    .book:active .frame{
+      transform:rotate(0deg) translateY(-2px) scale(.985) !important;
+      transition:transform .15s ease;
+    }
+
+    /* Caption */
+    .book figcaption{ padding-top:2px; }
+    .book figcaption .t{ font-size:13px; line-height:1.2; }
+    .book figcaption .y{ font-size:9px; margin-top:4px; }
+    .book figcaption .tap-hint{ font-size:8.5px; margin-top:5px; letter-spacing:.2em; }
+
+    /* Show swipe hint */
+    .shelf-swipe-hint{ display:flex; }
+
+    /* Drawer on mobile — calmer treatment */
+    .book-drawer{ margin-top:36px; }
+    .book-drawer .drawer-pad{
+      padding:36px 0 32px;
+      border-top-color:rgba(255,255,255,.07);
+    }
+    .drawer-close{ top:36px; }
+    .drawer-left .d-title{ font-size:clamp(22px, 5.5vw, 30px); }
+    .drawer-left .d-synopsis{ font-size:15.5px; line-height:1.62; }
+    .drawer-left .d-becca{ font-size:14.5px; }
+    .drawer-right .d-role-card{ padding:18px 22px; }
+    .drawer-right .d-role-card .rc-role{ font-size:17px; }
+
+    /* Soften shelf borders */
+    .shelf-foot{ margin-top:40px; padding-top:20px; }
+  }
+
   /* ─── Kind Words (rotating quotes) ──────────────────────── */
   .kind{ padding-block:140px; background:var(--bg); }
+  @media (max-width:720px){ .kind{ padding-block:72px; } }
 
   .kind-grid{
     display:grid;
@@ -807,8 +1241,34 @@
       <a href="#kind-words">Kind Words</a>
       <a href="#contact">Contact</a>
     </nav>
+    <button class="nav-toggle" id="navToggle" aria-label="Open menu" aria-expanded="false">
+      <span class="bar"></span>
+      <span class="bar"></span>
+      <span class="bar"></span>
+    </button>
   </div>
 </header>
+
+<!-- ─── Mobile fullscreen nav ─────────────────────────────────── -->
+<div class="mobile-nav" id="mobileNav" aria-hidden="true">
+  <div class="mobile-nav-bar">
+    <div class="mark">Rebecca Bright <span class="small">Editorial</span></div>
+    <button class="mobile-nav-close" id="navClose" aria-label="Close menu">
+      <span class="bar"></span>
+      <span class="bar"></span>
+    </button>
+  </div>
+  <ul class="mobile-nav-links">
+    <li><a href="#about">About</a></li>
+    <li><a href="#services">Services</a></li>
+    <li><a href="#projects">Projects</a></li>
+    <li><a href="#kind-words">Kind Words</a></li>
+    <li class="nav-contact">
+      <a href="#contact"><span class="contact-dot"></span>Contact</a>
+    </li>
+  </ul>
+  <div class="mobile-nav-foot">Rebecca Bright Editorial &middot; Est. 2024</div>
+</div>
 
 <main>
 
@@ -898,8 +1358,6 @@
     </div>
   </div>
 </section>
-
-<div class="divider wrap"><span class="glyph">&#10086;</span></div>
 
 <!-- ─── SERVICES (above projects) ─────────────────────────────── -->
 <section class="services-section" id="services" data-screen-label="02 Services">
@@ -1066,24 +1524,29 @@
 
 <!-- ─── SELECTED PROJECTS ─────────────────────────────────────── -->
 <section class="work-section" id="projects" data-screen-label="03 Selected Projects">
-  <div class="wrap">
-    <div class="section-head">
-      <div class="label"><span class="ln"></span><span>Selected Projects</span></div>
-    </div>
-  </div>
-
   <div class="shelf">
     <div class="shelf-inner">
 
-      <div class="shelf-marquee">
-        <span class="num">Eight titles</span>
-        <span class="ln"></span>
-        <em>2019 &mdash; 2024</em>
+      <div class="shelf-title shelf-fade">
+        <div class="shelf-label"><span class="ln"></span><span>Selected Projects</span></div>
+        <h2>Books I've <em>helped shape.</em></h2>
       </div>
 
       <div class="books">
 
-        <figure class="book b1">
+        <figure class="book b1" tabindex="0" role="button" aria-pressed="false"
+          data-title="The Quiet Architecture of Rivers"
+          data-author="A. Marlowe"
+          data-genre="Popular Science"
+          data-year="2024"
+          data-publisher="Island Press"
+          data-accent="#f4ecd6"
+          data-role="Developmental Editor"
+          data-role-desc="Structural shaping, chapter-level editorial letters, and revision rounds through to final manuscript."
+          data-synopsis="A lyrical exploration of how rivers shape landscapes, cultures, and the human imagination — from headwaters to estuary. A. Marlowe spent five years researching hydrology and the people who live and work at rivers' edges."
+          data-becca="This was one of those rare manuscripts that already knew what it wanted to be. My job was mostly to get out of the way — and ask the right questions at the chapter breaks."
+          data-quote="Rebecca reads with the patience of a river. She found the shape the book was always reaching toward."
+          data-quote-attr="A. Marlowe — popular science, 2024">
           <div class="frame v-cream">
             <div class="typo">
               <div class="pub">Island Press · 2024</div>
@@ -1095,10 +1558,23 @@
           <figcaption>
             <div class="t">The Quiet Architecture of Rivers<em>A. Marlowe</em></div>
             <div class="y"><span class="genre">POPULAR SCIENCE</span> · 2024</div>
+            <div class="tap-hint">Tap to explore →</div>
           </figcaption>
         </figure>
 
-        <figure class="book b2">
+        <figure class="book b2" tabindex="0" role="button" aria-pressed="false"
+          data-title="Borrowed Light"
+          data-author="J. Reyes"
+          data-genre="Memoir"
+          data-year="2023"
+          data-publisher="Independent"
+          data-accent="#2371a8"
+          data-role="Developmental Editor &amp; Proposal Editor"
+          data-role-desc="Proposal development from rough overview to submission-ready package, then full developmental edit on the completed manuscript."
+          data-synopsis="A searching, formally inventive memoir about grief, second-generation identity, and the photographs a family leaves behind. Winner of the 2023 Graywolf Prize for Nonfiction."
+          data-becca="J. came to me with a proposal and a first chapter. We spent three months finding the book's spine before the prose even began. That early architecture work is invisible once a book is made — and irreplaceable."
+          data-quote="Working with Rebecca felt like being read by my smartest friend — the one who tells you the truth, kindly. My proposal sold within a month."
+          data-quote-attr="J. Reyes — memoir, 2023">
           <div class="frame v-blue">
             <div class="typo">
               <div class="pub">Memoir · 2023</div>
@@ -1110,10 +1586,23 @@
           <figcaption>
             <div class="t">Borrowed Light<em>J. Reyes</em></div>
             <div class="y"><span class="genre">MEMOIR</span> · 2023</div>
+            <div class="tap-hint">Tap to explore →</div>
           </figcaption>
         </figure>
 
-        <figure class="book b3">
+        <figure class="book b3" tabindex="0" role="button" aria-pressed="false"
+          data-title="Field Notes from the Understory"
+          data-author="M. Okafor"
+          data-genre="Popular Science"
+          data-year="2023"
+          data-publisher="Field Notes Press"
+          data-accent="#c2e5d3"
+          data-role="Line Editor"
+          data-role-desc="Sentence-level edit for clarity, voice, and scientific accuracy, with a consistency pass to align terminology for a general readership."
+          data-synopsis="An intimate guide to the forest floor — fungi, mosses, decomposers — and the ecologists who spend their careers looking down. M. Okafor is a mycologist and essayist."
+          data-becca="M. is a scientist who can really write. My work here was mostly precision: making sure the science landed cleanly for general readers without flattening the specialist's voice."
+          data-quote="She has the rare gift of holding the whole architecture of a book in her head while still caring about a comma. I trusted her completely."
+          data-quote-attr="M. Okafor — popular science, 2023">
           <div class="frame v-deep">
             <div class="typo">
               <div class="pub">Field Notes Press · 2023</div>
@@ -1125,10 +1614,23 @@
           <figcaption>
             <div class="t">Field Notes from the Understory<em>M. Okafor</em></div>
             <div class="y"><span class="genre">POPULAR SCIENCE</span> · 2023</div>
+            <div class="tap-hint">Tap to explore →</div>
           </figcaption>
         </figure>
 
-        <figure class="book b4">
+        <figure class="book b4" tabindex="0" role="button" aria-pressed="false"
+          data-title="A Guide to Slow Travel"
+          data-author="S. Whitten"
+          data-genre="Guidebook"
+          data-year="2022"
+          data-publisher="Independent"
+          data-accent="#c2e5d3"
+          data-role="Structural Edit &amp; Copywriting"
+          data-role-desc="Full structural review and renegotiation of the book's form, followed by copywriting for jacket, catalogue, and author web pages."
+          data-synopsis="A practical and philosophical guide to unhurried travel — by train, ferry, and on foot — with itineraries for twelve European routes. A book as much about being present as about going anywhere."
+          data-becca="This one surprised me. What started as a practical guidebook became something closer to a travel essay with footnotes. We leaned into it, and the book is better for the detour."
+          data-quote=""
+          data-quote-attr="">
           <div class="frame v-mist">
             <div class="typo">
               <div class="pub">Guidebook · 2022</div>
@@ -1140,10 +1642,23 @@
           <figcaption>
             <div class="t">A Guide to Slow Travel<em>S. Whitten</em></div>
             <div class="y"><span class="genre">GUIDEBOOK</span> · 2022</div>
+            <div class="tap-hint">Tap to explore →</div>
           </figcaption>
         </figure>
 
-        <figure class="book b5">
+        <figure class="book b5" tabindex="0" role="button" aria-pressed="false"
+          data-title="The Long Bright Land"
+          data-author="D. Holloway"
+          data-genre="Essays"
+          data-year="2022"
+          data-publisher="Independent"
+          data-accent="#5e8f9b"
+          data-role="Book Coach &amp; Manuscript Assessment"
+          data-role-desc="Six months of coaching across the drafting of four essays, followed by a full manuscript assessment letter and a single revision round."
+          data-synopsis="Ten essays on wildness, place, and the politics of public land — from the Boundary Waters to the Sonoran Desert. D. Holloway is a policy researcher and lifelong birder."
+          data-becca="D. came to me not knowing if they had a book or a collection. They had a book. The coaching work was about showing them the shape they'd already made."
+          data-quote=""
+          data-quote-attr="">
           <div class="frame v-teal">
             <div class="typo">
               <div class="pub">Essays · 2022</div>
@@ -1155,10 +1670,23 @@
           <figcaption>
             <div class="t">The Long Bright Land<em>D. Holloway</em></div>
             <div class="y"><span class="genre">ESSAYS</span> · 2022</div>
+            <div class="tap-hint">Tap to explore →</div>
           </figcaption>
         </figure>
 
-        <figure class="book b6">
+        <figure class="book b6" tabindex="0" role="button" aria-pressed="false"
+          data-title="Soft Tools"
+          data-author="N. Iyer"
+          data-genre="Graphic Memoir"
+          data-year="2021"
+          data-publisher="Drawn &amp; Quarterly"
+          data-accent="#a9c3b6"
+          data-role="Developmental Editor"
+          data-role-desc="Structural editorial work on a hybrid text/image form — narrative arc, pacing, chapter architecture — alongside the illustrator's script revisions."
+          data-synopsis="A graphic memoir about a software engineer who leaves tech to become a furniture-maker — told in ink washes and fragments of found poetry. N. Iyer draws from life."
+          data-becca="Working in a hybrid form was genuinely new for me. What I brought was story structure and an ear for pacing. What N. brought was everything else — the form, the beauty, the risk."
+          data-quote=""
+          data-quote-attr="">
           <div class="frame v-sage">
             <div class="typo">
               <div class="pub">Graphic memoir · 2021</div>
@@ -1170,10 +1698,23 @@
           <figcaption>
             <div class="t">Soft Tools<em>N. Iyer</em></div>
             <div class="y"><span class="genre">COMIC / MEMOIR</span> · 2021</div>
+            <div class="tap-hint">Tap to explore →</div>
           </figcaption>
         </figure>
 
-        <figure class="book b7">
+        <figure class="book b7" tabindex="0" role="button" aria-pressed="false"
+          data-title="After the Dam"
+          data-author="R. Castellanos"
+          data-genre="Reportage"
+          data-year="2020"
+          data-publisher="Beacon Press"
+          data-accent="#5588ab"
+          data-role="Proposal Editor &amp; Line Editor"
+          data-role-desc="Full proposal edit for submission, then returned post-acquisition for a line edit pass on the completed manuscript."
+          data-synopsis="Reported narrative following the aftermath of a catastrophic dam failure and the communities still fighting for accountability five years later. R. Castellanos is an investigative journalist."
+          data-becca="A genuinely urgent book. I helped R. shape the proposal — which sold quickly — and then returned once the manuscript was done. Two different kinds of work, two different hats."
+          data-quote=""
+          data-quote-attr="">
           <div class="frame v-dust">
             <div class="typo">
               <div class="pub">Reportage · 2020</div>
@@ -1185,10 +1726,23 @@
           <figcaption>
             <div class="t">After the Dam<em>R. Castellanos</em></div>
             <div class="y"><span class="genre">REPORTAGE</span> · 2020</div>
+            <div class="tap-hint">Tap to explore →</div>
           </figcaption>
         </figure>
 
-        <figure class="book b8">
+        <figure class="book b8" tabindex="0" role="button" aria-pressed="false"
+          data-title="Common Birds, Common Names"
+          data-author="L. Pham"
+          data-genre="Field Guide"
+          data-year="2019"
+          data-publisher="Island Press"
+          data-accent="#e9e3d4"
+          data-role="Acquiring Editor &amp; Developmental Editor"
+          data-role-desc="Acquired the title during my tenure at Island Press, then shepherded through full developmental editing and into production."
+          data-synopsis="A field guide that pairs common birds with the folk names, stories, and ecological lore they've accumulated across cultures. A book as much about language as about birds."
+          data-becca="One of my last acquisitions at Island Press — and still one of my favorites. L. had an idea no one had done before, and the patience to do it right. I still keep a copy on my desk."
+          data-quote="Rebecca believed in this book before I did. That kind of editorial faith changes what a writer is capable of."
+          data-quote-attr="L. Pham — field guide, 2019">
           <div class="frame v-paper">
             <div class="typo">
               <div class="pub">Field guide · 2019</div>
@@ -1200,9 +1754,23 @@
           <figcaption>
             <div class="t">Common Birds, Common Names<em>L. Pham</em></div>
             <div class="y"><span class="genre">FIELD GUIDE</span> · 2019</div>
+            <div class="tap-hint">Tap to explore →</div>
           </figcaption>
         </figure>
 
+      </div>
+
+      <div class="shelf-swipe-hint" aria-hidden="true">Swipe to browse</div>
+
+      <!-- ─── Editorial drawer ─── -->
+      <div class="book-drawer" id="bookDrawer">
+        <div class="drawer-inner">
+          <div class="drawer-pad">
+            <button class="drawer-close" id="drawerClose" aria-label="Close"></button>
+            <div class="drawer-left" id="drawerLeft"></div>
+            <div class="drawer-right" id="drawerRight"></div>
+          </div>
+        </div>
       </div>
 
       <div class="shelf-foot">
@@ -1297,6 +1865,36 @@
 
 <div id="tweaks-mount"></div>
 
+<!-- ─── Mobile nav ───────────────────────────────────────── -->
+<script>
+  (function(){
+    var toggle = document.getElementById('navToggle');
+    var close  = document.getElementById('navClose');
+    var nav    = document.getElementById('mobileNav');
+    var links  = nav.querySelectorAll('a');
+
+    function open(){
+      nav.classList.add('is-open');
+      nav.setAttribute('aria-hidden','false');
+      toggle.setAttribute('aria-expanded','true');
+      toggle.classList.add('is-open');
+      document.body.style.overflow = 'hidden';
+    }
+    function shut(){
+      nav.classList.remove('is-open');
+      nav.setAttribute('aria-hidden','true');
+      toggle.setAttribute('aria-expanded','false');
+      toggle.classList.remove('is-open');
+      document.body.style.overflow = '';
+    }
+
+    toggle.addEventListener('click', function(){ nav.classList.contains('is-open') ? shut() : open(); });
+    close.addEventListener('click', shut);
+    links.forEach(function(a){ a.addEventListener('click', shut); });
+    document.addEventListener('keydown', function(e){ if(e.key === 'Escape') shut(); });
+  })();
+</script>
+
 <!-- ─── Quote rotator ─────────────────────────────────────── -->
 <script data-cfasync="false" src="/cdn-cgi/scripts/5c5dd728/cloudflare-static/email-decode.min.js"></script><script>
   (function(){
@@ -1344,6 +1942,135 @@
         btn.setAttribute('aria-expanded', String(!open));
       });
     });
+  })();
+</script>
+
+<!-- ─── Scroll fade-in ───────────────────────────────────────── -->
+<script>
+  (function(){
+    if(!('IntersectionObserver' in window)) {
+      document.querySelectorAll('.shelf-fade').forEach(function(el){ el.classList.add('is-visible'); });
+      return;
+    }
+    var io = new IntersectionObserver(function(entries){
+      entries.forEach(function(e){
+        if(e.isIntersecting){ e.target.classList.add('is-visible'); io.unobserve(e.target); }
+      });
+    }, { threshold:0.08, rootMargin:'0px 0px -32px 0px' });
+    document.querySelectorAll('.shelf-fade').forEach(function(el){ io.observe(el); });
+  })();
+</script>
+
+<!-- ─── Book editorial drawer ──────────────────────────────── -->
+<script>
+  (function(){
+    var books   = document.querySelectorAll('.book[role="button"]');
+    var drawer  = document.getElementById('bookDrawer');
+    var dLeft   = document.getElementById('drawerLeft');
+    var dRight  = document.getElementById('drawerRight');
+    var dClose  = document.getElementById('drawerClose');
+    var active  = null;
+
+    function esc(s){ return (s||'').replace(/&amp;/g,'&'); }
+
+    function buildLeft(d){
+      var meta = [
+        {l:'Genre',     v: d.genre},
+        {l:'Year',      v: d.year},
+        {l:'Publisher', v: esc(d.publisher)},
+      ];
+      var metaHtml = meta.map(function(m){
+        return '<div class="m"><span class="m-lbl">'+m.l+'</span><span class="m-val">'+m.v+'</span></div>';
+      }).join('');
+      return '<div class="d-eyebrow">Editorial record</div>'
+        + '<h3 class="d-title">'+d.title+'</h3>'
+        + '<div class="d-author">'+d.author+'</div>'
+        + '<div class="d-meta">'+metaHtml+'</div>'
+        + '<p class="d-synopsis">'+d.synopsis+'</p>'
+        + '<p class="d-becca">'+d.becca+'</p>';
+    }
+
+    function buildRight(d){
+      var html = '<div class="d-role-card">'
+        + '<div class="rc-lbl">Editorial role</div>'
+        + '<div class="rc-role">'+esc(d.role)+'</div>'
+        + '<div class="rc-desc">'+esc(d['role-desc'] || d.roleDesc || d['data-role-desc'] || '')+'</div>'
+        + '</div>';
+      if(d.quote){
+        html += '<div class="d-quote">'
+          + '<blockquote>“'+d.quote+'”</blockquote>'
+          + (d.quoteAttr ? '<cite>'+d.quoteAttr+'</cite>' : '')
+          + '</div>';
+      }
+      return html;
+    }
+
+    function getData(fig){
+      var ds = fig.dataset;
+      return {
+        title:     ds.title     || '',
+        author:    ds.author    || '',
+        genre:     ds.genre     || '',
+        year:      ds.year      || '',
+        publisher: ds.publisher || '',
+        accent:    ds.accent    || 'rgba(194,229,211,.8)',
+        role:      ds.role      || '',
+        roleDesc:  ds.roleDesc  || '',
+        synopsis:  ds.synopsis  || '',
+        becca:     ds.becca     || '',
+        quote:     ds.quote     || '',
+        quoteAttr: ds.quoteAttr || '',
+      };
+    }
+
+    function open(fig){
+      var d = getData(fig);
+      // build content
+      dLeft.innerHTML  = buildLeft(d);
+      /* role-desc lives in dataset as roleDesc after camelCase conversion */
+      var rd = fig.dataset.roleDesc || '';
+      dRight.innerHTML = '<div class="d-role-card">'
+        + '<div class="rc-lbl">Editorial role</div>'
+        + '<div class="rc-role">'+esc(d.role)+'</div>'
+        + '<div class="rc-desc">'+rd+'</div>'
+        + '</div>'
+        + (d.quote ? '<div class="d-quote"><blockquote>“'+d.quote+'”</blockquote>'+(d.quoteAttr?'<cite>'+d.quoteAttr+'</cite>':'')+'</div>' : '');
+
+      // accent line colour
+      drawer.querySelector('.drawer-pad').style.setProperty('--drawer-accent', d.accent);
+
+      // mark active book
+      if(active){ active.classList.remove('is-active'); active.setAttribute('aria-pressed','false'); }
+      fig.classList.add('is-active');
+      fig.setAttribute('aria-pressed','true');
+      active = fig;
+
+      // open drawer
+      drawer.classList.add('is-open');
+
+      // scroll so drawer is visible (small offset)
+      setTimeout(function(){
+        drawer.scrollIntoView({behavior:'smooth', block:'nearest'});
+      }, 200);
+    }
+
+    function close(){
+      drawer.classList.remove('is-open');
+      if(active){ active.classList.remove('is-active'); active.setAttribute('aria-pressed','false'); active=null; }
+    }
+
+    books.forEach(function(fig){
+      fig.addEventListener('click', function(){
+        if(fig === active){ close(); return; }
+        open(fig);
+      });
+      fig.addEventListener('keydown', function(e){
+        if(e.key==='Enter'||e.key===' '){ e.preventDefault(); fig.click(); }
+      });
+    });
+
+    dClose.addEventListener('click', close);
+    document.addEventListener('keydown', function(e){ if(e.key==='Escape') close(); });
   })();
 </script>
 
