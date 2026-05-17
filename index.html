@@ -296,10 +296,9 @@
   }
 
   .hero{
-    min-height:calc(100vh - 72px);
     display:grid;
     align-items:center;
-    padding-block:96px 110px;
+    padding-block:76px 72px;
     overflow:hidden;
   }
   .hero-grid{
@@ -423,6 +422,7 @@
   }
 
   section{ padding-block:var(--section); }
+  #about{ padding-top:80px; }
   .about-grid{
     display:grid;
     grid-template-columns:.9fr 1.1fr;
@@ -485,20 +485,8 @@
     border-block:1px solid var(--outline);
   }
   .services-layout{
-    display:grid;
-    grid-template-columns:.42fr 1fr;
-    gap:72px;
-  }
-  .side-note{
-    position:sticky;
-    top:120px;
-    align-self:start;
-    color:var(--teal);
-    font-family:var(--display);
-    font-size:22px;
-    font-style:italic;
-    line-height:1.3;
-    padding-right:34px;
+    max-width:980px;
+    margin-left:auto;
   }
   .service-list{
     list-style:none;
@@ -981,14 +969,12 @@
     :root{ --margin:32px; --section:88px; }
     .hero-grid,
     .about-grid,
-    .services-layout,
     .project-intro,
     .drawer-card,
     .contact-grid{ grid-template-columns:1fr; }
     .hero-art{ min-height:420px; }
     .portrait-card{ inset:0 0 auto auto; }
     .marginalia{ left:0; bottom:0; }
-    .side-note{ position:relative; top:auto; padding-right:0; }
     .book-shelf{ grid-template-columns:repeat(2, 1fr); }
   }
   @media (max-width:720px){
@@ -1054,8 +1040,6 @@
     .copy p{ font-size:16px; line-height:28px; }
     .copy p + p{ margin-top:18px; }
     .services-band{ padding-block:52px; }
-    .services-layout{ gap:24px; }
-    .side-note{ font-size:21px; line-height:1.28; }
     .service-toggle{ grid-template-columns:30px 1fr; gap:16px; align-items:start; }
     .service-name{ font-size:25px; line-height:1.06; }
     .service-detail{ grid-template-columns:1fr; padding-left:0; gap:24px; }
@@ -1248,7 +1232,6 @@
     <div class="wrap">
       <div class="section-label">Services</div>
       <div class="services-layout">
-        <aside class="side-note">Editorial work should feel precise, human, and deeply useful: never performative, never overbuilt.</aside>
         <ul class="service-list" id="serviceList">
           <li class="service-item is-open">
             <button class="service-toggle" type="button" aria-expanded="true"><span class="service-plus"></span><span class="service-name">Book Coaching</span></button>
